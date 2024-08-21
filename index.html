@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# website: http://ogp.me/ns/website#">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>tooth!!</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="assets/css/style.css">
+    </head>
+  <body>
+    <canvas id="first-anime"></canvas>
+    <div class="first-text">
+        <p class="first-text--p" aria-hidden="true">
+            <span class="char" style="--char-index: 0"> 華 </span>
+      
+            <span class="char" style="--char-index: 1"> や </span>
+      
+            <span class="char" style="--char-index: 2"> ぐ </span>
+      
+            <span class="char" style="--char-index: 3"> 上 </span>
+      
+            <span class="char" style="--char-index: 4"> 品 </span>
+      
+            <span class="char" style="--char-index: 5"> な </span>
+      
+            <span class="char" style="--char-index: 6"> 香 </span>
+      
+            <span class="char" style="--char-index: 7"> り </span>
+      
+            <span class="char" style="--char-index: 8"> そ </span>
+      
+            <span class="char" style="--char-index: 9"> れ </span>
+      
+            <span class="char" style="--char-index: 10"> が </span>
+      
+            <span class="char" style="--char-index: 11"> t </span>
+      
+            <span class="char" style="--char-index: 12"> o </span>
+      
+            <span class="char" style="--char-index: 13"> o </span>
+      
+            <span class="char" style="--char-index: 14"> t </span>
+
+            <span class="char" style="--char-index: 15"> h </span>
+        </p>
+    </div>
+    <main class="content">
+        <p class="iiititle">TOOTH</p>
+        <div class="menu">
+            <ol>
+                <li class="nav">top</li>
+                <li class="nav">about</li>
+                <li class="nav">product</li>
+                <li class="nav">herb</li>
+                <li class="nav">nav</li>
+            </ol>
+            <div class="pagenation">
+                <div class="pointsec">
+                    <span class="point point--01"></span>
+                    <span class="point point--02"></span>
+                    <span class="point point--03"></span>
+                    <span class="point point--04"></span>
+                    <span class="point point--05"></span>
+                </div>
+                <div class="navline">
+                    <div class="line line--01"></div>
+                    <div class="line line--02"></div>
+                    <div class="line line--03"></div>
+                    <div class="line line--04"></div>
+                </div>
+                <span class="point-current">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </div>
+        </div>
+        <div class="scroll-btn">
+            <div class="border" id="scroll">                
+                <span>SCROLL</span>
+            </div>
+        </div>
+        <div class="pagetop-btn">
+            <div class="border" id="pagetop">
+                <span>PAGE TOP</span>
+            </div>
+        </div>
+        <!-- <div class="wp2">
+            <img src="assets/img/info.png" alt="写真" class="pic1">
+            <img src="assets/img/nav.png" alt="写真" class="pic4">
+            <img src="assets/img/nav22.png" alt="写真" class="pic5">
+            <img src="assets/img/nav4.png" alt="写真" class="pic7">
+            <img src="assets/img/nav5.png" alt="写真" class="pic8">
+        </div> -->
+        <section class="top section" id="top">
+            <p class="title">
+                <text style="font-family:Ink Free;">
+                    <tspan x="0">BUTANIST</tspan>
+                </text>
+            </p>
+            <div class="aaa">
+                <img src="assets/img/toothtop.png" alt="写真">
+                <h1>TOOTH</h1>
+            </div>
+        </section>
+        <section class="about section" id="about">
+            <div class="animation"></div>
+            <div class="grade"></div>
+            <div class="wrapper">
+                <div class="wp">
+                    <div class="iii">
+                        <h2>ブタニスト発<br>
+                            心の底から本気の<br>
+                            ダメージケアタイム
+                        </h2>
+                        <p>
+                            「自然の中でありのまま生きる」をテーマに<br>
+                            生まれたBUTANISTは、<br>
+                            開発当初から今まで自然の恵みと向き合い、<br>
+                            様々な工夫を凝らしてきました。<br>
+                        </p>
+                        <p>自然を追い求め続ける中で、<br>
+                            私たちが行きついたその先は「ハーブ」。<br>
+                            自然の素材を織り込んだ、<br>
+                            ハーブの効能を追究し、<br>
+                            生み出された新たなケアタイムが、<br>
+                            TOOTHです。
+                        </p>
+                        <p>時を経たとしても、美しい姿のままで。<br>
+                            TOOTHはハーブが宿す力で、<br>
+                            心の底から本気のケア。<br>
+                            「麗らかなひと時」を。
+                        </p>
+                        <h2>日々の暮らしに、<br>
+                            癒しのハーブを。
+                        </h2>
+                        <div class="iii-link">
+                            <a class="linkbtn">詳細はこちら</a>
+                            <a class="linkbtn">ダメージケアステップ</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="threejs-container">
+                <img src="assets/img/momijipng.png" alt="momiji" class="momiji1 about-img img--none">
+                <img src="assets/img/akaimipng.png" alt="akaimi" class="akaimi1 about-img img--none">
+                <img src="assets/img/akaimipng.png" alt="akaimi" class="akaimi2 about-img img--none">
+                <img src="assets/img/akaimipng.png" alt="akaimi" class="akaimi3 about-img img--none">
+                <img src="assets/img/midoripng.png" alt="midori" class="midori1 about-img img--none">
+                <img src="assets/img/midoripng.png" alt="midori" class="midori2 about-img img--none">
+                <img src="assets/img/minikinokopng.png" alt="kinoko" class="kinoko1 about-img img--none">
+                <img src="assets/img/minikinokopng.png" alt="kinoko" class="kinoko2 about-img img--none">
+            </div>
+        </section>
+        <section class="product section" id="product">
+            <div class="uuu">
+                <span>CONTENTS.01</span>
+                <h2>PRODUCT</h2>
+                <p>ハーブの力でダメージケアとリラックス</p>
+                <a class="linkbtn">詳細はこちら</a>
+            </div>
+            <div id="threejs-container2">
+                <img src="assets/img/momijipng.png" alt="momiji" class="momiji1 product-img img--none">
+                <img src="assets/img/akaimipng.png" alt="akaimi" class="akaimi1 product-img img--none">
+                <img src="assets/img/akaimipng.png" alt="akaimi" class="akaimi2 product-img img--none">
+                <img src="assets/img/akaimipng.png" alt="akaimi" class="akaimi3 product-img img--none">
+                <img src="assets/img/midoripng.png" alt="midori" class="midori1 product-img img--none">
+                <img src="assets/img/midoripng.png" alt="midori" class="midori2 product-img img--none">
+                <img src="assets/img/minikinokopng.png" alt="kinoko" class="kinoko1 product-img img--none">
+                <img src="assets/img/minikinokopng.png" alt="kinoko" class="kinoko2 product-img img--none">
+            </div>
+        </section>
+        <section class="herb section" id="herb">
+            <div class="eee">
+                <span>CONTENTS.02</span>
+                <h2>HERB</h2>
+                <p>ハーブの魅力的な世界をご紹介</p>
+                <a class="linkbtn">詳細はこちら</a>
+            </div>
+        </section>
+        <section class="navi section" id="navi">
+            <img src="assets/img/tuchi.png" alt="写真" class="tuchipic">
+            <img src="assets/img/tuchionly.png" alt="写真" class="tuchionlypic">
+            <img src="assets/img/edaha.png" alt="写真" class="edahapic">
+            <div class="ooo">
+                <h2>TOOTH</h2>
+                <div class="navlink">
+                    <div class="navwrapper">
+                        <div class="navlink__list">
+                            <a class="navlink__list--link linkbtn2">ABOUT</a>
+                            <a class="navlink__list--link linkbtn2">HERB</a>
+                        </div>
+                        <div class="navlink__list">
+                            <a class="navlink__list--link linkbtn2">PRODUCT</a>
+                            <a class="navlink__list--link linkbtn2">SHOP LIST</a>
+                        </div>
+                    </div>
+                    <div class="navlink__list">
+                        <a class="navlink__list--link linkbtn2">FAQ</a>
+                    </div>
+                </div>
+                <div>
+                    <p>
+                        <img src="assets/img/cart.png" alt="カート">
+                        <span>お買い求めはこちらから</span>
+                    </p>
+                    <div class="shoplist">
+                        <div>
+                            <a class="shoplist--link linkbtn">OFFICIAL SHOP</a>
+                            <a class="shoplist--link linkbtn">Amazon</a>
+                        </div>
+                        <div>
+                            <a class="shoplist--link linkbtn">Rakuten</a>
+                            <a class="shoplist--link linkbtn">Yahoo! ショッピング</a>
+                        </div>
+                    </div>
+                    <div class="sns">
+                        <img src="assets/img/instagram.png" alt="インスタグラム" class="sns-img">
+                        <img src="assets/img/facebook.png" alt="facebook" class="sns-img">
+                        <img src="assets/img/tiktok.png" alt="tiktok" class="sns-img">
+                        <img src="assets/img/pintarest.png" alt="pintarest" class="sns-img">
+                        <img src="assets/img/youtube.png" alt="youtube" class="sns-img">
+                    </div>
+                </div>
+                <p>&copy; 2024 BUTANIST</p>
+            </div>
+        </section>
+        <div class="returntoptitle">
+            <h1>TOOTH</h1>
+        </div>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- <script type="text/javascript" src="assets/js/jquery.scrollify.js"></script> -->
+    <script type="module" src="./assets/js/main1.js"></script>
+  </body>
+</html>
