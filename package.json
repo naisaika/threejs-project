@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "name": "tooth-project",
+=======
+  "name": "threejs-project",
+>>>>>>> f57fd372cc20841f825cdb9f95a5cb90fc0248c2
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +13,11 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "vite": "^5.4.0"
+=======
+    "vite": "^5.4.1"
+>>>>>>> f57fd372cc20841f825cdb9f95a5cb90fc0248c2
   },
   "dependencies": {
     "three": "^0.167.1"
