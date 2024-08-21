@@ -1,0 +1,12 @@
+@use "reset";
+
+main {
+    overflow: auto;
+    scroll-snap-type: y mandatory;
+    height: 100vh;
+}
+
+section {
+    scroll-snap-align: start;
+    height: 100vh;
+  }
