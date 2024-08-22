@@ -228,7 +228,7 @@ function initializeAboutObserver() {
         grade.classList.add('grade--none');
         aboutImg.forEach(img => img.classList.add('img--none'));
         clearScene('threejs-container');
-        aboutSceneInitialized = false; // Aboutシーンの初期化フラグをリセット
+        aboutSceneInitialized = false; 
         entry.target.classList.remove('is-animated');
       }
     });
@@ -261,7 +261,7 @@ const productObserver = new IntersectionObserver(entries => {
     }
   });
 }, {
-  threshold: 0.5 // 閾値を0.1から0.5に増やして負荷を軽減
+  threshold: 0.5 
 });
 
 if (productSection) {
@@ -277,24 +277,29 @@ const tsuchiPic = document.querySelector('.tuchipic');
 const tuchionlyPic = document.querySelector('.tuchionlypic');
 const edahaPic = document.querySelector('.edahapic');
 
-// IntersectionObserverの設定
 const naviObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      tsuchiPic.classList.add('navipic--show');
+      tsuchiPic.classList.add('tuchipic--show');
+      tuchionlyPic.classList.add('tuchionlypic--show');
+      tsuchiPic.addEventListener('animationend', function() {
+        edahaPic.classList.add('edahapic--show');
+      });
       scrollBtn.classList.remove('scroll-btn--show');
       scrollBtn2.classList.add('pagetop-btn--show');
       isCanvasAnimating = false;
     } else {
       if (!isCanvasAnimating) {
-        tsuchiPic.classList.remove('navipic--show'); 
+        tsuchiPic.classList.remove('tuchipic--show');
+        tuchionlyPic.classList.remove('tuchionlypic--show');
+        edahaPic.classList.remove('edahapic--show'); 
         scrollBtn.classList.add('scroll-btn--show');
         scrollBtn2.classList.remove('pagetop-btn--show');
       }
     }
   });
 }, {
-  threshold: 0.1 // 閾値を0.1から0.5に増やして負荷を軽減
+  threshold: 0.1
 });
 
 if (naviSection) {
@@ -302,10 +307,7 @@ if (naviSection) {
 }
 
 // tsuchiPicのアニメーションが終了した後に他の要素のアニメーションを実行
-tsuchiPic.addEventListener('animationend', function() {
-  tuchionlyPic.classList.add('navipic--show');
-  edahaPic.classList.add('navipic--show');
-});
+
 
 const menu = document.querySelector('.menu');
 

@@ -1105,32 +1105,54 @@ canvas {
   position: relative;
   display: block;
 }
+.navi > .tuchipic {
+  opacity: 0;
+}
 .navi > .tuchipic--show {
   position: absolute;
-  top: 50%;
+  top: 70%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 60%;
   -webkit-animation: navipicshow 2s forwards;
           animation: navipicshow 2s forwards;
 }
+.navi > .tuchionlypic {
+  opacity: 0;
+}
 .navi > .tuchionlypic--show {
   position: absolute;
-  top: 50%;
+  top: 70%;
   left: 50%;
+  z-index: 10;
   transform: translate(-50%, -50%);
   width: 60%;
-  -webkit-animation: navipicshow 2s forwards;
-          animation: navipicshow 2s forwards;
+  -webkit-animation: tuchionlyshow 2s forwards;
+          animation: tuchionlyshow 2s forwards;
+}
+.navi > .edahapic {
+  opacity: 0;
 }
 .navi > .edahapic--show {
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 51%;
   transform: translate(-50%, -50%);
-  width: 60%;
-  -webkit-animation: navipicshow 2s forwards;
-          animation: navipicshow 2s forwards;
+  width: 90%;
+  -webkit-animation: edahapicshow 8s forwards;
+          animation: edahapicshow 8s forwards;
+}
+.navi > .shampoopic {
+  opacity: 0;
+}
+.navi > .shampoopic--show {
+  position: absolute;
+  top: 50%;
+  left: 51%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  -webkit-animation: edahapicshow 8s forwards;
+          animation: edahapicshow 8s forwards;
 }
 
 .ooo {
@@ -1255,6 +1277,56 @@ canvas {
   }
   100% {
     opacity: 0;
+  }
+}
+@-webkit-keyframes tuchionlyshow {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes tuchionlyshow {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes edahapicshow {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translate(-50%, -60%);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -60%);
+  }
+}
+@keyframes edahapicshow {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translate(-50%, -60%);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -60%);
   }
 }
 @-webkit-keyframes poyon {

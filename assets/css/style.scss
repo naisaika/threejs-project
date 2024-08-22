@@ -776,29 +776,50 @@ canvas {
     display: block;
     // position: absolute;
     // left: 50%;
-    & > .tuchipic--show {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 60%;
-        animation: navipicshow 2s forwards;
+    & > .tuchipic {
+        opacity: 0;
+        &--show {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            animation: navipicshow 2s forwards;
+        }
     }
-    & > .tuchionlypic--show {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 60%;
-        animation: navipicshow 2s forwards;
+    & > .tuchionlypic {
+        opacity: 0;
+        &--show {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            z-index: 10;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            animation: tuchionlyshow 2s forwards;
+        }
     }
-    & > .edahapic--show {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 60%;
-        animation: navipicshow 2s forwards;
+    & > .edahapic {
+        opacity: 0;
+        &--show {
+            position: absolute;
+            top: 50%;
+            left: 51%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            animation: edahapicshow 8s forwards;
+        }
+    }
+    & > .shampoopic {
+        opacity: 0;
+        &--show {
+            position: absolute;
+            top: 50%;
+            left: 51%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            animation: edahapicshow 8s forwards;
+        }
     }
 }
 
@@ -909,6 +930,32 @@ canvas {
     }
 }
 
+@keyframes tuchionlyshow {
+    0% {  
+        opacity: 0; 
+    }
+    50% { 
+        opacity: 1; 
+    }
+    100% { 
+        opacity: 1; 
+    }
+}
+
+@keyframes edahapicshow {
+    0% {  
+        opacity: 0; 
+        transform: translate(-50%, -50%);
+    }
+    50% { 
+        opacity: 0.7; 
+        transform: translate(-50%, -60%);
+    }
+    100% { 
+        opacity: 1; 
+        transform: translate(-50%, -60%);
+    }
+}
 
 @keyframes poyon {
     0%   { transform: scale(1.0, 1.0) translate(0%, 0%); }
