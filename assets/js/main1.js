@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentPoint) {
       const rect = currentPoint.getBoundingClientRect();
       const parentRect = currentPoint.parentElement.getBoundingClientRect();
-      const additionalOffset = 8; // 調整するオフセット
+      const additionalOffset = 8; 
       pointCurrent.style.top = `${rect.top - parentRect.top + additionalOffset}px`;
     }
   }
@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateLineColors() {
     let activeSectionIndex = 0;
 
-    // 現在表示されているセクションのインデックスを取得
     sections.forEach((section, index) => {
       const rect = section.getBoundingClientRect();
       if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
@@ -46,7 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // 各line要素のクラスを更新
     lines.forEach((line, index) => {
       if (index < activeSectionIndex) {
         line.classList.add('line--colored');
@@ -63,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (index !== -1 && index !== currentIndex) {
           currentIndex = index;
   
-          // ポイントの背景色を更新
           points.forEach((point, idx) => {
             if (idx <= currentIndex) {
               point.classList.add('point--active');
@@ -74,14 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
   
           updatePointCurrentPosition();
           updateLineColors();
-          updateNavActiveClass(index); // ここでアクティブなナビを更新
+          updateNavActiveClass(index);
         }
       }
     });
   }
 
   const observer = new IntersectionObserver(handleIntersection, {
-    threshold: 0.5, // 閾値を調整
+    threshold: 0.5,
   });
 
   sections.forEach(section => observer.observe(section));
@@ -94,8 +91,6 @@ const titleObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             const index = Array.from(sections).indexOf(entry.target);
-
-            // 最初のセクション（top）の時はクラスを削除、それ以外は追加
             if (index === 0) {
                 iiititle.classList.remove('pshow');
             } else {
@@ -107,7 +102,6 @@ const titleObserver = new IntersectionObserver((entries) => {
     threshold: 0.1
 });
 
-// 各セクションを監視
 sections.forEach(section => {
     titleObserver.observe(section);
 });
@@ -120,7 +114,6 @@ const title = document.querySelector('.title');
 const topObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting && firstAnime.style.display === 'none') {
-      // topセクションが再び表示されたときにクラスを追加
       topSection.classList.add('top--change');
       aaa.classList.add('aaa--change');
       title.classList.add('title-show');
@@ -131,7 +124,7 @@ const topObserver = new IntersectionObserver(entries => {
     }
   });
 }, {
-  threshold: 0.5 // 50%が表示されたときに発火
+  threshold: 0.5
 });
 
 if (topSection) {
@@ -241,7 +234,6 @@ function initializeAboutObserver() {
   }
 }
 
-// ページの読み込み時にスクロールを監視するように設定
 document.addEventListener('DOMContentLoaded', monitorScrollForAnimation);
 
 const productSection = document.querySelector('#product');
@@ -276,6 +268,8 @@ const scrollBtn2 = document.querySelector('.pagetop-btn');
 const tsuchiPic = document.querySelector('.tuchipic');
 const tuchionlyPic = document.querySelector('.tuchionlypic');
 const edahaPic = document.querySelector('.edahapic');
+const shampooPic = document.querySelector('.shampoopic');
+const ooo = document.querySelector('.ooo');
 
 const naviObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
@@ -284,15 +278,29 @@ const naviObserver = new IntersectionObserver(entries => {
       tuchionlyPic.classList.add('tuchionlypic--show');
       tsuchiPic.addEventListener('animationend', function() {
         edahaPic.classList.add('edahapic--show');
+        setTimeout(function() {
+          shampooPic.classList.add('shampoopic--show');
+        }, 1000);
+        edahaPic.addEventListener('animationend', function() {
+          edahaPic.style.animation = 'moveleft 1.5s forwards';
+          shampooPic.style.animation = 'moveleft2 1.5s forwards';
+          tuchionlyPic.style.animation = 'moveleft3 1.5s forwards';
+          ooo.classList.add('ooo--show');
+        });
       });
       scrollBtn.classList.remove('scroll-btn--show');
       scrollBtn2.classList.add('pagetop-btn--show');
       isCanvasAnimating = false;
     } else {
-      if (!isCanvasAnimating) {
         tsuchiPic.classList.remove('tuchipic--show');
         tuchionlyPic.classList.remove('tuchionlypic--show');
         edahaPic.classList.remove('edahapic--show'); 
+        shampooPic.classList.remove('shampoopic--show');
+        tuchionlyPic.style.animation = '';
+        edahaPic.style.animation = '';
+        shampooPic.style.animation = '';
+        ooo.classList.remove('ooo--show');
+        if (!isCanvasAnimating) {
         scrollBtn.classList.add('scroll-btn--show');
         scrollBtn2.classList.remove('pagetop-btn--show');
       }
@@ -306,34 +314,25 @@ if (naviSection) {
   naviObserver.observe(naviSection);
 }
 
-// tsuchiPicのアニメーションが終了した後に他の要素のアニメーションを実行
-
-
 const menu = document.querySelector('.menu');
 
-
 scrollBtn2.addEventListener('click', function() {
-  // アニメーションをリセット
-  // navElement.style.animation = '';
-  // navElement2.style.animation = '';
-  // navElement3.style.animation = '';
-  // navElement4.style.animation = '';
-  // navElement5.style.animation = '';
-  // ooo.style.animation = '';
   menu.classList.remove('menu-show');
   iiititle.classList.remove('pshow');
   scrollBtn2.classList.remove('pagetop-btn--show');
-
-// navSectionをアニメーション開始位置に移動
-  // naviSection.style.left = '0%';
   naviSection.classList.add('animationtop');
+  tsuchiPic.classList.remove('tuchipic--show');
+  tuchionlyPic.classList.remove('tuchionlypic--show');
+  edahaPic.classList.remove('edahapic--show'); 
+  shampooPic.classList.remove('shampoopic--show');
+  ooo.classList.remove('ooo--show');
   const returnTopTitle = document.querySelector('.returntoptitle');
   setTimeout(function() {
     returnTopTitle.classList.remove('returntoptitle');
     returnTopTitle.classList.add('returntoptitle--show');
     document.querySelector('.content').scrollTo({
       top: 0,
-      behavior: 'smooth' // スムーズにスクロールする
+      behavior: 'smooth'
   });
   }, 1000);
 
@@ -351,17 +350,14 @@ scrollBtn2.addEventListener('click', function() {
 
 let currentSectionIndex = -1;
 
-// Create an IntersectionObserver to observe sections
 const sectionObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      // Update the current section index based on visibility
       currentSectionIndex = Array.from(sections).indexOf(entry.target);
     }
   });
-}, { threshold: 0.5 }); // Adjust threshold as needed
+}, { threshold: 0.5 });
 
-// Observe each section
 sections.forEach(section => sectionObserver.observe(section));
 
 function resetClasses() {

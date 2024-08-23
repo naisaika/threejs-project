@@ -687,7 +687,7 @@ ol > li {
   }
   100% {
     opacity: 1;
-    transform: translate(-120%, -50%);
+    transform: translate(-70%, -50%);
   }
 }
 @keyframes moveleft {
@@ -696,7 +696,7 @@ ol > li {
   }
   100% {
     opacity: 1;
-    transform: translate(-120%, -50%);
+    transform: translate(-70%, -50%);
   }
 }
 @-webkit-keyframes moveleft2 {
@@ -705,7 +705,7 @@ ol > li {
   }
   100% {
     opacity: 1;
-    transform: translate(-100%, -50%);
+    transform: translate(-80%, -50%);
   }
 }
 @keyframes moveleft2 {
@@ -714,7 +714,25 @@ ol > li {
   }
   100% {
     opacity: 1;
-    transform: translate(-100%, -50%);
+    transform: translate(-80%, -50%);
+  }
+}
+@-webkit-keyframes moveleft3 {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-80%, -45%);
+  }
+}
+@keyframes moveleft3 {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-80%, -45%);
   }
 }
 .iiititle {
@@ -1127,8 +1145,8 @@ canvas {
   z-index: 10;
   transform: translate(-50%, -50%);
   width: 60%;
-  -webkit-animation: tuchionlyshow 2s forwards;
-          animation: tuchionlyshow 2s forwards;
+  -webkit-animation: tuchionlyshow 3s forwards;
+          animation: tuchionlyshow 3s forwards;
 }
 .navi > .edahapic {
   opacity: 0;
@@ -1139,20 +1157,21 @@ canvas {
   left: 51%;
   transform: translate(-50%, -50%);
   width: 90%;
-  -webkit-animation: edahapicshow 8s forwards;
-          animation: edahapicshow 8s forwards;
+  -webkit-animation: edahapicshow 4s forwards;
+          animation: edahapicshow 4s forwards;
 }
 .navi > .shampoopic {
   opacity: 0;
 }
 .navi > .shampoopic--show {
   position: absolute;
-  top: 50%;
-  left: 51%;
+  top: 65%;
+  left: 48%;
+  z-index: 20;
   transform: translate(-50%, -50%);
-  width: 90%;
-  -webkit-animation: edahapicshow 8s forwards;
-          animation: edahapicshow 8s forwards;
+  width: 60%;
+  -webkit-animation: edahapicshow 2s forwards;
+          animation: edahapicshow 2s forwards;
 }
 
 .ooo {
@@ -1160,22 +1179,28 @@ canvas {
   margin-top: 5%;
   opacity: 0;
   cursor: default;
+  position: absolute;
+  left: 50%;
+}
+.ooo--show {
+  -webkit-animation: oooshow 2s forwards;
+          animation: oooshow 2s forwards;
 }
 .ooo > h2 {
   font-size: 3.5rem;
   letter-spacing: 0.5em;
-  margin-left: 10%;
+  text-align: center;
 }
 .ooo > .navlink {
   font-size: 2rem;
   letter-spacing: 0.2em;
   font-weight: bold;
   color: #4d4d4d;
-  margin: 64px 0;
-  margin-left: 8%;
+  margin: 64px;
 }
 .ooo > .navlink > .navwrapper {
   display: flex;
+  justify-content: center;
 }
 .ooo > .navlink > .navwrapper > .navlink__list {
   display: flex;
@@ -1186,7 +1211,7 @@ canvas {
 }
 .ooo > div > p {
   display: flex;
-  margin-left: 11%;
+  justify-content: center;
 }
 .ooo > div > p > img {
   width: 32px;
@@ -1201,12 +1226,13 @@ canvas {
 .ooo > div > .shoplist {
   display: flex;
   flex-direction: column;
-  margin-left: 5%;
 }
 .ooo > div > .shoplist > div {
   display: flex;
 }
 .ooo > div > .shoplist > div > a {
+  width: 250px;
+  text-align: center;
   text-decoration: none;
   font-weight: 600;
   color: #383128;
@@ -1215,14 +1241,13 @@ canvas {
   border-radius: 30px;
   margin-top: 20px;
   text-align: center;
-  width: 18%;
 }
 .ooo > div > .shoplist > div > a:nth-of-type(1) {
   margin-right: 24px;
 }
 .ooo > div > .sns {
   display: flex;
-  margin-left: 15%;
+  justify-content: center;
 }
 .ooo > div > .sns > img {
   width: 30px;
@@ -1237,7 +1262,7 @@ canvas {
   font-size: 0.75rem;
   color: #838383;
   margin-top: 40px;
-  margin-left: 20%;
+  text-align: center;
 }
 
 @-webkit-keyframes oooshow {
@@ -1327,6 +1352,28 @@ canvas {
   100% {
     opacity: 1;
     transform: translate(-50%, -60%);
+  }
+}
+@-webkit-keyframes shampoopicshow {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes shampoopicshow {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
   }
 }
 @-webkit-keyframes poyon {
