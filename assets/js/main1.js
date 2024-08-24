@@ -270,6 +270,9 @@ const tuchionlyPic = document.querySelector('.tuchionlypic');
 const edahaPic = document.querySelector('.edahapic');
 const shampooPic = document.querySelector('.shampoopic');
 const ooo = document.querySelector('.ooo');
+const navLink = document.querySelectorAll('.navlink__list--link');
+const shopLink = document.querySelectorAll('.shoplink__list--link');
+const snsImg = document.querySelectorAll('.sns-img');
 
 const naviObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
@@ -286,6 +289,15 @@ const naviObserver = new IntersectionObserver(entries => {
           shampooPic.style.animation = 'moveleft2 1.5s forwards';
           tuchionlyPic.style.animation = 'moveleft3 1.5s forwards';
           ooo.classList.add('ooo--show');
+          navLink.forEach((link) => {
+              link.style.cursor = 'pointer';
+          });
+          shopLink.forEach((link) => {
+            link.style.cursor = 'pointer';
+          });
+          snsImg.forEach((link) => {
+            link.style.cursor = 'pointer';
+          });
         });
       });
       scrollBtn.classList.remove('scroll-btn--show');
@@ -369,7 +381,6 @@ function resetClasses() {
     aaa.classList.add('aaa--change');
     title.classList.add('title-show');
 
-  // アニメーションをリセット
   top.style.animation = '';
   aaa.style.animation = '';
   title.style.animation = '';

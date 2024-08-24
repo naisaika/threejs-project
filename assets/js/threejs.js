@@ -125,8 +125,8 @@ function aboutScene(containerId) {
     {
       url: 'assets/img/tooth.glb',
       settings: {
-        scale: [38, 45, 40],
-        position: [150, -140, 50],
+        scale: [48, 55, 50],
+        position: [220, -80, 50],
         rotation: { x: -Math.PI / 12, y: Math.PI, z: -Math.PI / 8 },
         rotationSpeed: 0.03,
         maxRotation: Math.PI * 0.9,
