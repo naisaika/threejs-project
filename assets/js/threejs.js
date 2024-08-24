@@ -21,14 +21,22 @@ function initScene() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.shadowMap.enabled = true;
+
+  window.addEventListener('resize', onWindowResize, false);
+}
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 function loadModel(url, { scale, position, rotation, rotationSpeed, maxRotation }) {
   const loader = new GLTFLoader();
 
-  // DRACOLoader の設定
   const dracoLoader = new DRACOLoader();
-  dracoLoader.setDecoderPath('/libs/draco/'); // Draco デコーダーのパスを設定
+  dracoLoader.setDecoderPath('/libs/draco/');
   loader.setDRACOLoader(dracoLoader);
 
   loader.load(url, function (gltf) {
@@ -38,15 +46,11 @@ function loadModel(url, { scale, position, rotation, rotationSpeed, maxRotation 
     scene.add(gltf.scene);
 
     let totalRotation = 0;
-    let lastFrameTime = Date.now();
     let initialY = gltf.scene.position.y;
     const speed = 0.001;
     const amplitude = 3;
 
     function animate() {
-      const currentTime = Date.now();
-      const delta = currentTime - lastFrameTime;
-    
       if (totalRotation < maxRotation) {
         gltf.scene.rotation.y += rotationSpeed;
         totalRotation += rotationSpeed;
