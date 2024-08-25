@@ -85,7 +85,6 @@ function renderScene(containerId, models) {
     loadModel(model.url, model.settings);
   });
 
-  // 全体のシーンをレンダリング
   renderer.render(scene, camera);
 }
 
@@ -167,5 +166,140 @@ function productScene(containerId) {
   renderScene(containerId, models);
 }
 
+function loadModels(callback) {
+  const loader = new GLTFLoader();
+  const dracoLoader = new DRACOLoader();
+  dracoLoader.setDecoderPath('/libs/draco/'); 
+  loader.setDRACOLoader(dracoLoader);
+  const modelPaths = [
+    'assets/img/momiji.glb',
+    'assets/img/toothgreenkinomi.glb',
+    'assets/img/akaimi.glb',
+    'assets/img/minikinoko.glb'
+  ];
+
+  const loadedModels = [];
+  let loadedCount = 0;
+
+  modelPaths.forEach((path, index) => {
+    loader.load(path, (gltf) => {
+      const model = gltf.scene;
+      loadedModels[index] = model;
+      loadedCount++;
+
+      if (loadedCount === modelPaths.length) {
+        callback(loadedModels);
+      }
+    }, undefined, (error) => {
+      console.error(`モデルの読み込みエラー: ${path}`, error);
+    });
+  });
+}
+
+function herbScene(containerId) {
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(
+    50,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+  camera.position.set(0, 0, 500); 
+  camera.lookAt(scene.position);
+
+  renderer = new THREE.WebGLRenderer({ alpha: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.shadowMap.enabled = false;
+
+  const modelPaths = [
+    'assets/img/momiji.glb',
+    'assets/img/toothgreenkinomi.glb',
+    'assets/img/akaimi.glb',
+    'assets/img/minikinoko.glb'
+  ];
+
+  const scaleFactors = {
+    'momiji.glb': 5.0, 
+    'toothgreenkinomi.glb': 1.0, 
+    'akaimi.glb': 0.4,     
+    'minikinoko.glb': 1.0    
+  };
+
+  const modelCounts = {
+    'momiji.glb': 15,
+    'toothgreenkinomi.glb': 15,
+    'akaimi.glb': 15,
+    'minikinoko.glb': 15
+  };
+
+  loadModels((models) => {
+
+    const totalModels = models.length;
+    let allModels = [];
+
+    // モデルごとの生成位置を準備
+    for (const modelPath of modelPaths) {
+      const modelName = modelPath.split('/').pop();
+      const count = modelCounts[modelName] || 0;
+      
+      for (let i = 0; i < count; i++) {
+        const model = models[modelPaths.indexOf(modelPath)].clone();
+        const scaleFactor = scaleFactors[modelName] || 1;
+        const scale = Math.random() * 10 + 5;
+        model.scale.set(scale * scaleFactor, scale * scaleFactor, scale * scaleFactor);
+
+        // モデルの初期位置設定
+        model.position.set(
+          Math.random() * 400,
+          Math.random() * 400 - 50,
+          Math.random() * 400 - 200 
+        );
+
+        // 初期方向をランダムに設定
+        model.rotation.set(
+          Math.random() * 2 * Math.PI,
+          Math.random() * 2 * Math.PI,
+          Math.random() * 2 * Math.PI
+        );
+
+        // 初期位置を記録
+        allModels.push({ model, startPosition: model.position.clone() });
+        scene.add(model);
+      }
+    }
+
+    let startTime = Date.now();
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const elapsedTime = (Date.now() - startTime) / 1000; // 秒数
+      const speed = 4; // モデルの広がり速度
+
+      allModels.forEach(({ model, startPosition }) => {
+        // モデルが右上から放射状に広がる
+        const t = Math.min(elapsedTime * speed, 1);
+        model.position.set(
+          startPosition.x + t * (startPosition.x - window.innerWidth / 4),  // 画面右上から拡散
+          startPosition.y + t * (startPosition.y - window.innerHeight / 4), // 画面右上から拡散
+          startPosition.z + t * (-startPosition.z)  // z方向も広がる
+        );
+        // 左回りに回転させる
+        model.rotation.y += 0.0004; // Y軸周りに少しずつ回転
+      });
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    const container = document.getElementById(containerId);
+    if (container) {
+      container.appendChild(renderer.domElement);
+    } else {
+      console.error('Container not found');
+    }
+  });
+}
+
 export {scene, camera, renderer, initScene, 
-    loadModel, renderScene, clearScene, aboutScene, productScene}
+    loadModel, renderScene, clearScene, aboutScene, productScene, herbScene}

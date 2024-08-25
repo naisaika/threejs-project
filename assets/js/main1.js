@@ -8,6 +8,7 @@ import { initScene } from'./threejs.js';
 import { clearScene } from './threejs.js';
 import { aboutScene } from'./threejs.js';
 import { productScene } from'./threejs.js';
+import { herbScene } from'./threejs.js';
 
 initScene();
 
@@ -258,6 +259,24 @@ const productObserver = new IntersectionObserver(entries => {
 
 if (productSection) {
   productObserver.observe(productSection);
+}
+
+const herbSection = document.getElementById('herb');
+
+const herbObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      herbScene('threejs-container3');
+    } else {
+      clearScene('threejs-container3');
+    }
+  });
+}, {
+  threshold: 0.5 
+});
+
+if (herbSection) {
+  herbObserver.observe(herbSection);
 }
 
 let isCanvasAnimating = true;

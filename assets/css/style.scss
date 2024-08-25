@@ -746,6 +746,7 @@ canvas {
 
 .herb {
     position: relative;
+    overflow-x: hidden;
     & > .eee {
         position: absolute;
         bottom: 30%;

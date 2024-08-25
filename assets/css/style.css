@@ -1088,6 +1088,7 @@ canvas {
 }
 .herb {
   position: relative;
+  overflow-x: hidden;
 }
 .herb > .eee {
   position: absolute;
