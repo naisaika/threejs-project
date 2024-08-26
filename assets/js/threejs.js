@@ -20,7 +20,7 @@ function initScene() {
   renderer = new THREE.WebGLRenderer({ alpha: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.enabled = false;
 
   window.addEventListener('resize', onWindowResize, false);
 }
@@ -196,6 +196,8 @@ function loadModels(callback) {
   });
 }
 
+let allModels = [];
+
 function herbScene(containerId) {
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(
@@ -228,15 +230,14 @@ function herbScene(containerId) {
 
   const modelCounts = {
     'momiji.glb': 15,
-    'toothgreenkinomi.glb': 15,
-    'akaimi.glb': 15,
-    'minikinoko.glb': 15
+    'toothgreenkinomi.glb': 18,
+    'akaimi.glb': 18,
+    'minikinoko.glb': 18
   };
 
   loadModels((models) => {
 
-    const totalModels = models.length;
-    let allModels = [];
+    allModels = []; // モデルをリセット
 
     // モデルごとの生成位置を準備
     for (const modelPath of modelPaths) {
@@ -270,6 +271,7 @@ function herbScene(containerId) {
     }
 
     let startTime = Date.now();
+
     function animate() {
       requestAnimationFrame(animate);
 
@@ -279,11 +281,12 @@ function herbScene(containerId) {
       allModels.forEach(({ model, startPosition }) => {
         // モデルが右上から放射状に広がる
         const t = Math.min(elapsedTime * speed, 1);
-        model.position.set(
-          startPosition.x + t * (startPosition.x - window.innerWidth / 4),  // 画面右上から拡散
-          startPosition.y + t * (startPosition.y - window.innerHeight / 4), // 画面右上から拡散
-          startPosition.z + t * (-startPosition.z)  // z方向も広がる
-        );
+
+          model.position.set(
+            startPosition.x + t * (startPosition.x - window.innerWidth / 4),
+            startPosition.y + t * (startPosition.y - window.innerHeight / 4),
+            startPosition.z + t * (-startPosition.z)
+          );
         // 左回りに回転させる
         model.rotation.y += 0.0004; // Y軸周りに少しずつ回転
       });
@@ -301,5 +304,63 @@ function herbScene(containerId) {
   });
 }
 
+function animateHerbSection(callback) {
+  if (allModels.length === 0) {
+    console.error('アニメーション用のモデルが見つかりません。');
+    return;
+  }
+
+  let animationStartTime = Date.now();
+  let animationDuration = 2000; // アニメーションの所要時間（ミリ秒）
+
+  function animate() {
+    const elapsedTime = (Date.now() - animationStartTime) / animationDuration;
+
+    if (elapsedTime >= 1) {
+      // モデルの最終位置を設定 (elapsedTime >= 1 の場合、最終位置に設定する)
+      allModels.forEach(({ model }) => {
+        model.position.set(0, 0, 0);
+      });
+      renderer.render(scene, camera);
+      callback();
+      return;
+    }
+
+    allModels.forEach(({ model, startPosition }) => {
+      model.position.set(
+        (startPosition.x -200) * (1 - elapsedTime),
+        (startPosition.y - 250) * (1 - elapsedTime),
+        startPosition.z * (1 - elapsedTime)
+      );
+    });
+
+    renderer.render(scene, camera);
+    
+    requestAnimationFrame(animate);
+  }
+
+  requestAnimationFrame(animate);
+}
+
+const particleGeometry = new THREE.BufferGeometry();
+const count = 100;
+
+const positionArray = new Float32Array(count * 3);
+
+for(let i = 0; i < count* 3; i++) {
+  positionArray[i] = Math.random();
+}
+
+particleGeometry.setAttribute("position", new THREE.BufferAttribute(positionArray, 3))
+
+const pointMaterial = new THREE.PointsMaterial({
+    size: 0.15,
+    sizeAttenuation: true
+});
+const particles = new THREE.Points(particleGeometry, pointMaterial);
+scene.add(particles);
+
+
 export {scene, camera, renderer, initScene, 
-    loadModel, renderScene, clearScene, aboutScene, productScene, herbScene}
+    loadModel, renderScene, clearScene, aboutScene, productScene, herbScene,
+  animateHerbSection}

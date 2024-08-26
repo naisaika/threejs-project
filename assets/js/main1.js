@@ -9,6 +9,7 @@ import { clearScene } from './threejs.js';
 import { aboutScene } from'./threejs.js';
 import { productScene } from'./threejs.js';
 import { herbScene } from'./threejs.js';
+import { animateHerbSection } from'./threejs.js';
 
 initScene();
 
@@ -261,24 +262,6 @@ if (productSection) {
   productObserver.observe(productSection);
 }
 
-const herbSection = document.getElementById('herb');
-
-const herbObserver = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      herbScene('threejs-container3');
-    } else {
-      clearScene('threejs-container3');
-    }
-  });
-}, {
-  threshold: 0.5 
-});
-
-if (herbSection) {
-  herbObserver.observe(herbSection);
-}
-
 let isCanvasAnimating = true;
 
 const naviSection = document.getElementById('navi');
@@ -322,7 +305,7 @@ const naviObserver = new IntersectionObserver(entries => {
       scrollBtn.classList.remove('scroll-btn--show');
       scrollBtn2.classList.add('pagetop-btn--show');
       isCanvasAnimating = false;
-    } else {
+  } else {
         tsuchiPic.classList.remove('tuchipic--show');
         tuchionlyPic.classList.remove('tuchionlypic--show');
         edahaPic.classList.remove('edahapic--show'); 
@@ -343,6 +326,62 @@ const naviObserver = new IntersectionObserver(entries => {
 
 if (naviSection) {
   naviObserver.observe(naviSection);
+}
+
+const herbSection = document.getElementById('herb');
+let animationInProgress = false;
+
+const herbObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      herbScene('threejs-container3');
+      window.addEventListener('wheel', handleMouseWheel);
+      } else {
+        clearScene('threejs-container3');
+        window.removeEventListener('wheel', handleMouseWheel);
+      }
+    }
+  );
+}, {
+  threshold: 0.5
+});
+
+if (herbSection) {
+  herbObserver.observe(herbSection);
+}
+
+function handleMouseWheel(event) {
+  if (animationInProgress) return;
+  const content = document.querySelector('.content');
+  const herbSection = document.getElementById('herb');
+  const nextSection = herbSection ? herbSection.nextElementSibling : null;
+  const previousSection = herbSection ? herbSection.previousElementSibling : null;
+
+  if (event.deltaY < 0) {
+    if (previousSection && previousSection.id === 'product') {
+      clearScene('threejs-container3');
+      content.style.scrollSnapType = 'y mandatory';
+      content.style.position = 'relative';
+      previousSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  } else if (event.deltaY > 0) {
+    if (nextSection && nextSection.id === 'navi') {
+      content.style.scrollSnapType = 'none';
+      content.style.position = 'fixed';
+      animateHerbSection(() => {
+        content.style.scrollSnapType = 'y mandatory';
+        content.style.position = 'relative';
+        scrollToNextSection();
+      });
+    }
+  }
+}
+
+function scrollToNextSection() {
+  const nextSection = herbSection.nextElementSibling;
+  if (nextSection) {
+    nextSection.scrollIntoView({ behavior: 'smooth' });
+  }
 }
 
 const menu = document.querySelector('.menu');
