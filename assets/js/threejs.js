@@ -118,6 +118,8 @@ function clearScene(containerId) {
 
   animationFrames.forEach(id => cancelAnimationFrame(id));
   animationFrames = [];
+
+  animationRunning = false; 
 }
 
 initScene();
@@ -197,8 +199,11 @@ function loadModels(callback) {
 }
 
 let allModels = [];
+let animationRunning = false;
 
 function herbScene(containerId) {
+  animationRunning = true;
+
   scene = new THREE.Scene();
   camera = new THREE.PerspectiveCamera(
     50,
@@ -237,7 +242,7 @@ function herbScene(containerId) {
 
   loadModels((models) => {
 
-    allModels = []; // モデルをリセット
+    allModels = [];
 
     // モデルごとの生成位置を準備
     for (const modelPath of modelPaths) {
@@ -273,6 +278,7 @@ function herbScene(containerId) {
     let startTime = Date.now();
 
     function animate() {
+      if (!animationRunning) return;
       requestAnimationFrame(animate);
 
       const elapsedTime = (Date.now() - startTime) / 1000; // 秒数
@@ -312,54 +318,228 @@ function animateHerbSection(callback) {
 
   let animationStartTime = Date.now();
   let animationDuration = 2000; // アニメーションの所要時間（ミリ秒）
+  let moveToCenterDuration = 2000; // 3Dモデルを中心に移動させるアニメーションの所要時間
+  let moveToCenterStartTime = null; // 中心に移動を開始する時間
+  let moveToOuterStartTime = null; // 外側に移動を開始する時間
+  let moveToOuterDuration = 2000; // 外側に移動させるアニメーションの所要時間
+  fadeOut = false; // 必ずリセット
+  animationRunning = true; // アニメーションが実行中かどうか
+
+  allModels.forEach(({ model, startPosition }) => {
+    model.position.copy(startPosition);
+  });
 
   function animate() {
+    if (!animationRunning) return; // アニメーションのキャンセル
     const elapsedTime = (Date.now() - animationStartTime) / animationDuration;
 
-    if (elapsedTime >= 1) {
-      // モデルの最終位置を設定 (elapsedTime >= 1 の場合、最終位置に設定する)
-      allModels.forEach(({ model }) => {
-        model.position.set(0, 0, 0);
-      });
-      renderer.render(scene, camera);
-      callback();
-      return;
-    }
+// 3Dモデルを画面の中央に移動させるアニメーション
+if (elapsedTime < 1) {
+  allModels.forEach(({ model, startPosition }) => {
+    model.position.set(
+      (startPosition.x - 150) * (1 - elapsedTime),
+      (startPosition.y - 250) * (1 - elapsedTime),
+      startPosition.z * (1 - elapsedTime)
+    );
+  });
 
-    allModels.forEach(({ model, startPosition }) => {
+  renderer.render(scene, camera);
+} else if (elapsedTime >= 1 && !moveToOuterStartTime) {
+  // 中心に移動が完了したら、外側に移動するアニメーションを開始
+  moveToCenterStartTime = Date.now();
+  drawParticles();
+  moveToOuterStartTime = Date.now(); // 外側に移動を開始する時間を記録
+} else if (moveToOuterStartTime) {
+  // 外側に移動するアニメーション
+  const moveToOuterElapsedTime = (Date.now() - moveToOuterStartTime) / moveToOuterDuration;
+  
+  if (moveToOuterElapsedTime >= 1) {
+    // アニメーションが完了したら最終位置に設定
+    allModels.forEach(({ model }) => {
       model.position.set(
-        (startPosition.x -200) * (1 - elapsedTime),
-        (startPosition.y - 250) * (1 - elapsedTime),
-        startPosition.z * (1 - elapsedTime)
+        (model.position.x - centerX) * (1 + moveToOuterElapsedTime) + centerX,
+        (model.position.y - centerY) * (1 + moveToOuterElapsedTime) + centerY,
+        model.position.z
       );
     });
-
     renderer.render(scene, camera);
-    
-    requestAnimationFrame(animate);
+    callback();
+    animationRunning = false;
+    resetParticles(); // パーティクルをリセット
+    resetLines(); // ラインをリセット
+    return;
   }
 
-  requestAnimationFrame(animate);
+  allModels.forEach(({ model }) => {
+    model.position.x += (model.position.x - centerX) * moveToOuterElapsedTime;
+    model.position.y += (model.position.y - centerY) * moveToOuterElapsedTime;
+  });
+
+  renderer.render(scene, camera);
 }
 
-const particleGeometry = new THREE.BufferGeometry();
-const count = 100;
-
-const positionArray = new Float32Array(count * 3);
-
-for(let i = 0; i < count* 3; i++) {
-  positionArray[i] = Math.random();
+requestAnimationFrame(animate);
 }
 
-particleGeometry.setAttribute("position", new THREE.BufferAttribute(positionArray, 3))
+requestAnimationFrame(animate);
+}
 
-const pointMaterial = new THREE.PointsMaterial({
-    size: 0.15,
-    sizeAttenuation: true
-});
-const particles = new THREE.Points(particleGeometry, pointMaterial);
-scene.add(particles);
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
+const particles = [];
+const lines = [];
+const numParticles = 2000; 
+const numLines = 100; // ランダムに描画する線の数
+const centerX = canvas.width / 2;
+const centerY = canvas.height / 2;
+const maxSpeed = 100; 
+const minSpeed = 10; 
+const acceleration = 0.05;
+let fadedParticles = 0; // 消えた粒子のカウント
+let fadeOut = false; // フェードアウトを開始するかどうか
+let lineAlpha = 0.5; // 放射線の透明度
+
+// パーティクルの作成
+function initializeParticles() {
+  particles.length = 0; // パーティクル配列をリセット
+  for (let i = 0; i < numParticles; i++) {
+    const angle = Math.random() * 2 * Math.PI;
+    const speed = Math.random() * (maxSpeed - minSpeed) + minSpeed;
+    const colors = ['rgb(211, 110, 76)', 'rgb(145, 89, 71)'];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const radius = Math.random() * 5; // 粒子の大きさをランダムにする
+    const distance = Math.random() * 250; // 中心からランダムな距離（例: 半径50px以内）
+
+    particles.push({
+      x : centerX + Math.cos(angle) * distance, // 中心から少しずらした位置
+      y : centerY + Math.sin(angle) * distance, // 中心から少しずらした位置
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      radius: radius, 
+      color: color,  
+      speed: speed
+    });
+  }
+}
+
+// ランダムな線の作成
+function initializeLines() {
+  lines.length = 0; // 線配列をリセット
+  for (let i = 0; i < numLines; i++) {
+    const angle = Math.random() * 2 * Math.PI;
+    const length = Math.random() * canvas.width * 0.5; // ランダムな長さ
+    const x1 = centerX;
+    const y1 = centerY;
+    const x2 = centerX + Math.cos(angle) * length;
+    const y2 = centerY + Math.sin(angle) * length;
+
+    lines.push({
+      x1: x1,
+      y1: y1,
+      x2: x2,
+      y2: y2,
+      alpha: 0.5 // 透明度
+    });
+  }
+}
+
+// パーティクルの描画
+function drawParticles() {
+  initializeParticles(); // パーティクルの初期化
+  initializeLines(); // ラインの初期化
+
+  fadedParticles = 0; // フェードアウトカウントをリセット
+  fadeOut = false; // フェードアウト状態をリセット
+  lineAlpha = 0.5; // ラインの透明度をリセット
+  
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // ランダムな線の描画（先に描画）
+    drawRadiatingLines();
+
+    // 粒子の描画（後に描画）
+    particles.forEach((p) => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, false);
+      ctx.shadowBlur = 30;
+      ctx.shadowColor = p.color;
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = 0.5;
+      ctx.fill();
+      ctx.closePath();
+
+      // 粒子の移動
+      p.vx += Math.cos(Math.atan2(p.vy, p.vx)) * acceleration;
+      p.vy += Math.sin(Math.atan2(p.vy, p.vx)) * acceleration;
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // 画面外に出た粒子をカウント
+      if (p.x < 0 || p.x > canvas.width || p.y < 0 || p.y > canvas.height) {
+        p.radius = 0;
+        fadedParticles++; // 消えた粒子をカウント
+      }
+    });
+
+    // 進行度が80%を超えたらフェードアウトを開始
+    if (!fadeOut && fadedParticles >= numParticles * 0.8) {
+      fadeOut = true;
+    }
+
+    if (fadeOut) {
+      lineAlpha -= 0.01; // Alpha値の減少量を調整してフェードアウト速度を早める
+      if (lineAlpha <= 0) {
+        lineAlpha = 0; // 完全に透明になったら止める
+        return; // アニメーションを終了
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+}
+
+// ランダムな放射線状の線の描画
+function drawRadiatingLines() {
+    ctx.save();
+    ctx.globalAlpha = lineAlpha; // Alpha値を適用
+    ctx.strokeStyle = 'rgba(223, 191, 153, 0.8)'; // 色を設定
+    ctx.lineWidth = 5; // 線の太さを設定
+    ctx.shadowBlur = 50; // ぼかし効果を設定
+    ctx.shadowColor = 'rgba(223, 191, 153, 0.8)'; // ぼかしの色を設定
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+
+        ctx.beginPath();
+        ctx.moveTo(line.x1, line.y1);
+        ctx.lineTo(line.x2, line.y2);
+        ctx.stroke();
+    }
+
+    ctx.restore();
+
+    // フェードアウトを行う
+    if (fadeOut) {
+      // 3Dモデルと同じように、中心から外へ広がる動きをつける
+      allModels.forEach(({ model }) => {
+        model.position.x += model.vx * acceleration;
+        model.position.y += model.vy * acceleration;
+        model.position.z += model.vz * acceleration;
+      });
+      renderer.render(scene, camera);
+
+        lineAlpha -= 0.05; // Alpha値の減少量を調整してフェードアウト速度を早める
+        if (lineAlpha <= 0) {
+            lineAlpha = 0; // 完全に透明になったら止める
+        }
+    }
+}
 
 export {scene, camera, renderer, initScene, 
     loadModel, renderScene, clearScene, aboutScene, productScene, herbScene,

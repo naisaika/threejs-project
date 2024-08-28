@@ -1402,3 +1402,18 @@ $productposition: (
         }
     }
 }
+
+#threejs-container3 {
+    position: relative;
+}
+
+#particle-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+}
+
+// .body {
+//     color: rgba(223, 191, 153, 0.8)
+// }

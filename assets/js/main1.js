@@ -329,13 +329,15 @@ if (naviSection) {
 }
 
 const herbSection = document.getElementById('herb');
+const content = document.querySelector('.content');
 let animationInProgress = false;
 
 const herbObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       herbScene('threejs-container3');
-      window.addEventListener('wheel', handleMouseWheel);
+      content.style.position = 'fixed';
+      window.addEventListener('wheel', handleMouseWheel, { passive: false });
       } else {
         clearScene('threejs-container3');
         window.removeEventListener('wheel', handleMouseWheel);
@@ -352,7 +354,9 @@ if (herbSection) {
 
 function handleMouseWheel(event) {
   if (animationInProgress) return;
-  const content = document.querySelector('.content');
+
+  event.preventDefault();
+
   const herbSection = document.getElementById('herb');
   const nextSection = herbSection ? herbSection.nextElementSibling : null;
   const previousSection = herbSection ? herbSection.previousElementSibling : null;
@@ -367,7 +371,6 @@ function handleMouseWheel(event) {
   } else if (event.deltaY > 0) {
     if (nextSection && nextSection.id === 'navi') {
       content.style.scrollSnapType = 'none';
-      content.style.position = 'fixed';
       animateHerbSection(() => {
         content.style.scrollSnapType = 'y mandatory';
         content.style.position = 'relative';
@@ -443,3 +446,4 @@ function resetClasses() {
   aaa.style.animation = '';
   title.style.animation = '';
 }
+

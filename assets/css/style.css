@@ -2267,4 +2267,14 @@ canvas {
     transform: translateX(24vw) translateY(-16vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
   }
 }
+#threejs-container3 {
+  position: relative;
+}
+
+#particle-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+}
 /*# sourceMappingURL=style.css.map */
