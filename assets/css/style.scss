@@ -1308,6 +1308,57 @@ $productposition: (
     }
 }
 
+.fuwafuwa {
+    animation: bound 5s forwards ease-in-out;
+}
+
+/* 各要素の fuwafuwa アニメーションを定義 */
+@for $i from 1 through 8 {
+    @keyframes bound-container1-#{$i} {
+        0% {
+            transform: translateX(nth(map-get($positions, $i), 1)) 
+                       translateY(nth(map-get($positions, $i), 2)) 
+                       rotate3d(1, 0, 0, nth(map-get($positions, $i), 3))
+                       rotate3d(0, 0, 1, nth(map-get($positions, $i), 4));
+        }
+        50% {
+            transform: translateX(nth(map-get($positions, $i), 1)) 
+                       translateY(calc(nth(map-get($positions, $i), 2) + 20px)) 
+                       rotate3d(1, 0, 0, nth(map-get($positions, $i), 3))
+                       rotate3d(0, 0, 1, nth(map-get($positions, $i), 4));
+        }
+        100% {
+            transform: translateX(nth(map-get($positions, $i), 1)) 
+                       translateY(nth(map-get($positions, $i), 2)) 
+                       rotate3d(1, 0, 0, nth(map-get($positions, $i), 3))
+                       rotate3d(0, 0, 1, nth(map-get($positions, $i), 4));
+        }
+    }
+}
+
+@for $j from 1 through 8 {
+    @keyframes bound-container2-#{$j} {
+        0% {
+            transform: translateX(nth(map-get($productposition, $j), 1)) 
+                       translateY(nth(map-get($productposition, $j), 2)) 
+                       rotate3d(1, 0, 0, nth(map-get($productposition, $j), 3))
+                       rotate3d(0, 0, 1, nth(map-get($productposition, $j), 4));
+        }
+        50% {
+            transform: translateX(nth(map-get($productposition, $j), 1)) 
+                       translateY(calc(nth(map-get($productposition, $j), 2) + 20px)) 
+                       rotate3d(1, 0, 0, nth(map-get($productposition, $j), 3))
+                       rotate3d(0, 0, 1, nth(map-get($productposition, $j), 4));
+        }
+        100% {
+            transform: translateX(nth(map-get($productposition, $j), 1)) 
+                       translateY(nth(map-get($productposition, $j), 2)) 
+                       rotate3d(1, 0, 0, nth(map-get($productposition, $j), 3))
+                       rotate3d(0, 0, 1, nth(map-get($productposition, $j), 4));
+        }
+    }
+}
+
 #threejs-container {
     & > .about-img {
         position: fixed;
@@ -1325,11 +1376,15 @@ $productposition: (
                 width: if($i == 1, 400px, if($i == 5, 200px, if($i == 6, 150px, if($i == 7, 100px, 80px))));
                 height: if($i == 1, 400px, if($i == 5, 200px, if($i == 6, 150px, if($i == 7, 50px, if($i == 8, 50px, null)))));
 
-                transform: translateX($posX) translateY($posY) 
-                            rotate3d(1, 0, 0, $rotateX)
-                            rotate3d(0, 0, 1, $rotateZ);
-                
-                animation: opacityanime 3s forwards, float-about-#{$i} 3s ease-in-out infinite;
+                /* 初期位置を設定 */
+                transform: translateX($posX) translateY($posY)
+                           rotate3d(1, 0, 0, $rotateX)
+                           rotate3d(0, 0, 1, $rotateZ);
+
+                /* アニメーションの設定 */
+                animation: opacityanime 1s forwards ease-in-out, 
+                           bound-container1-#{$i} 3s forwards ease-in-out 1s, 
+                           float-about-#{$i} 3s ease-in-out infinite 4s;
             }
         }
     }
@@ -1356,7 +1411,9 @@ $productposition: (
                             rotate3d(1, 0, 0, $rotX)
                             rotate3d(0, 0, 1, $rotZ);
                 
-                animation: opacityanime 3s forwards, float-product-#{$j} 3s ease-in-out infinite;
+                animation: opacityanime 1s forwards ease-in-out, 
+                            bound-container2-#{$j} 3s forwards ease-in-out 1s, 
+                            float-product-#{$j} 3s ease-in-out infinite 4s;
             }
         }
     }
@@ -1371,7 +1428,7 @@ $productposition: (
                         rotate3d(0, 0, 1, nth(map-get($positions, $i), 4));
         }
         50% {
-            transform: translateX(nth(map-get($positions, $i), 1)) translateY(calc(nth(map-get($positions, $i), 2) + 5px)) 
+            transform: translateX(nth(map-get($positions, $i), 1)) translateY(calc(nth(map-get($positions, $i), 2) + 10px)) 
                         rotate3d(1, 0, 0, nth(map-get($positions, $i), 3)) 
                         rotate3d(0, 0, 1, nth(map-get($positions, $i), 4));
         }
@@ -1391,7 +1448,7 @@ $productposition: (
                         rotate3d(0, 0, 1, nth(map-get($productposition, $j), 4));
         }
         50% {
-            transform: translateX(nth(map-get($productposition, $j), 1)) translateY(calc(nth(map-get($productposition, $j), 2) + 5px)) 
+            transform: translateX(nth(map-get($productposition, $j), 1)) translateY(calc(nth(map-get($productposition, $j), 2) + 10px)) 
                         rotate3d(1, 0, 0, nth(map-get($productposition, $j), 3)) 
                         rotate3d(0, 0, 1, nth(map-get($productposition, $j), 4));
         }
@@ -1413,7 +1470,3 @@ $productposition: (
     left: 0;
     z-index: 5;
 }
-
-// .body {
-//     color: rgba(223, 191, 153, 0.8)
-// }

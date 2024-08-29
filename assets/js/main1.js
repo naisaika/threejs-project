@@ -10,6 +10,10 @@ import { aboutScene } from'./threejs.js';
 import { productScene } from'./threejs.js';
 import { herbScene } from'./threejs.js';
 import { animateHerbSection } from'./threejs.js';
+import { initializeParticles } from'./threejs.js';
+import { initializeLines } from'./threejs.js';
+import { drawParticles } from'./threejs.js';
+import { clearParticles } from'./threejs.js';
 
 initScene();
 
@@ -216,12 +220,18 @@ function initializeAboutObserver() {
 
         iii.classList.add('iii--change');
         grade.classList.remove('grade--none');
-        aboutImg.forEach(img => img.classList.remove('img--none'));
+        aboutImg.forEach(img => {
+          img.classList.remove('img--none');
+          img.classList.add('fuwafuwa');
+      });
         entry.target.classList.add('is-animated');
       } else {
         iii.classList.remove('iii--change');
         grade.classList.add('grade--none');
-        aboutImg.forEach(img => img.classList.add('img--none'));
+        aboutImg.forEach(img => {
+          img.classList.add('img--none');
+          img.classList.remove('fuwafuwa');
+      });
         clearScene('threejs-container');
         aboutSceneInitialized = false; 
         entry.target.classList.remove('is-animated');
@@ -341,6 +351,7 @@ const herbObserver = new IntersectionObserver(entries => {
       } else {
         clearScene('threejs-container3');
         window.removeEventListener('wheel', handleMouseWheel);
+        clearParticles();
       }
     }
   );

@@ -32,7 +32,7 @@ function onWindowResize() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function loadModel(url, { scale, position, rotation, rotationSpeed, maxRotation }) {
+function loadModel(url, { scale, position, rotation, rotationSpeed, maxRotation, moveDistance }) {
   const loader = new GLTFLoader();
 
   const dracoLoader = new DRACOLoader();
@@ -45,32 +45,47 @@ function loadModel(url, { scale, position, rotation, rotationSpeed, maxRotation 
     gltf.scene.rotation.set(rotation.x || 0, rotation.y || 0, rotation.z || 0);
     scene.add(gltf.scene);
 
-    let totalRotation = 0;
-    let initialY = gltf.scene.position.y;
+    const startTime = Date.now();
+    const duration = 3800; // アニメーションの総時間 (ミリ秒)
+    const initialY = gltf.scene.position.y;
+    const amplitude = 10;
     const speed = 0.001;
-    const amplitude = 3;
 
     function animate() {
-      if (totalRotation < maxRotation) {
-        gltf.scene.rotation.y += rotationSpeed;
-        totalRotation += rotationSpeed;
+      const elapsedTime = Date.now() - startTime;
+      const progress = Math.min(elapsedTime / duration, 1);
+
+      // 回転の計算
+      gltf.scene.rotation.y += rotationSpeed;
+      if (gltf.scene.rotation.y >= maxRotation) {
+        gltf.scene.rotation.y = maxRotation;
+      }
+
+      // 位置の計算 (振動を加える)
+      const currentY = initialY + (moveDistance * progress) + amplitude * Math.sin(Date.now() * speed);
+      gltf.scene.position.y = currentY;
+
+      // 描画とアニメーションの続行
+      renderer.render(scene, camera);
+      if (progress < 1) {
         animationFrames.push(requestAnimationFrame(animate));
+      } else {
+        // 回転が終了した後の振動アニメーション
+          flowAnimate();
       }
     }
     
     function flowAnimate() {
-      gltf.scene.position.y = initialY + amplitude * Math.sin(Date.now() * speed);
+      gltf.scene.position.y = initialY + (moveDistance * Math.min(1, (Date.now() - startTime) / duration)) + amplitude * Math.sin(Date.now() * speed);
       renderer.render(scene, camera);
       animationFrames.push(requestAnimationFrame(flowAnimate));
     }
 
     animate();
-    flowAnimate();
 
   }, undefined, function (error) {
     console.error(error);
   });
-
 }
 
 function renderScene(containerId, models) {
@@ -131,10 +146,12 @@ function aboutScene(containerId) {
       url: 'assets/img/tooth.glb',
       settings: {
         scale: [48, 55, 50],
-        position: [220, -80, 50],
+        position: [220, -160, 50],
         rotation: { x: -Math.PI / 12, y: Math.PI, z: -Math.PI / 8 },
-        rotationSpeed: 0.03,
-        maxRotation: Math.PI * 0.9,
+        rotationSpeed: 0.04,
+        maxRotation: Math.PI * 3.9,
+        moveSpeed: 0.3, 
+        moveDistance: 120, // 移動する距離
       }
     },
   ];
@@ -148,20 +165,24 @@ function productScene(containerId) {
       url: 'assets/img/tooth2.glb',
       settings: {
         scale: [50, 60, 50],
-        position: [260, -100, 40],
+        position: [260, -200, 40],
         rotation: { x: -Math.PI / 12, z: -Math.PI / 10 },
         rotationSpeed: 0.1,
         maxRotation: Math.PI * 1.9,
+        moveSpeed: 0.3, 
+        moveDistance: 100, // 移動する距離
       }
     },
     {
       url: 'assets/img/toothpink.glb',
       settings: {
         scale: [40, 45, 40],
-        position: [120, -120, 40],
+        position: [120, -220, 40],
         rotation: { x: -Math.PI / 12, z: Math.PI / 20 },
         rotationSpeed: 0.1,
         maxRotation: Math.PI * 1.9,
+        moveSpeed: 0.3, 
+        moveDistance: 100, // 移動する距離
       }
     },
   ];
@@ -294,7 +315,7 @@ function herbScene(containerId) {
             startPosition.z + t * (-startPosition.z)
           );
         // 左回りに回転させる
-        model.rotation.y += 0.0004; // Y軸周りに少しずつ回転
+        model.rotation.y += 0.0008; // Y軸周りに少しずつ回転
       });
 
       renderer.render(scene, camera);
@@ -365,8 +386,6 @@ if (elapsedTime < 1) {
     renderer.render(scene, camera);
     callback();
     animationRunning = false;
-    resetParticles(); // パーティクルをリセット
-    resetLines(); // ラインをリセット
     return;
   }
 
@@ -400,7 +419,7 @@ const minSpeed = 10;
 const acceleration = 0.05;
 let fadedParticles = 0; // 消えた粒子のカウント
 let fadeOut = false; // フェードアウトを開始するかどうか
-let lineAlpha = 0.5; // 放射線の透明度
+let lineAlpha = 0.5;
 
 // パーティクルの作成
 function initializeParticles() {
@@ -441,18 +460,18 @@ function initializeLines() {
       y1: y1,
       x2: x2,
       y2: y2,
-      alpha: 0.5 // 透明度
+      alpha: 0.5
     });
   }
 }
 
 // パーティクルの描画
 function drawParticles() {
-  initializeParticles(); // パーティクルの初期化
-  initializeLines(); // ラインの初期化
+  initializeParticles();
+  initializeLines();
 
   fadedParticles = 0; // フェードアウトカウントをリセット
-  fadeOut = false; // フェードアウト状態をリセット
+  fadeOut = false; 
   lineAlpha = 0.5; // ラインの透明度をリセット
   
   function draw() {
@@ -541,6 +560,16 @@ function drawRadiatingLines() {
     }
 }
 
+// パーティクルのリセット
+function clearParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.length = 0;
+  lines.length = 0;
+  fadedParticles = 0; 
+  fadeOut = false; 
+  lineAlpha = 0.5; 
+}
+
 export {scene, camera, renderer, initScene, 
-    loadModel, renderScene, clearScene, aboutScene, productScene, herbScene,
-  animateHerbSection}
+  loadModel, renderScene, clearScene, aboutScene, productScene, herbScene,
+  animateHerbSection, initializeParticles, initializeLines, drawParticles, clearParticles}
