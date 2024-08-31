@@ -1,3 +1,5 @@
+'use strict';
+
 import { firstCanvas } from'./firstCanvas.js';
 
 window.onload = () => {
@@ -10,14 +12,11 @@ import { aboutScene } from'./threejs.js';
 import { productScene } from'./threejs.js';
 import { herbScene } from'./threejs.js';
 import { animateHerbSection } from'./threejs.js';
-import { initializeParticles } from'./threejs.js';
-import { initializeLines } from'./threejs.js';
-import { drawParticles } from'./threejs.js';
 import { clearParticles } from'./threejs.js';
 
 initScene();
 
-document.addEventListener('DOMContentLoaded', () => {
+
   const sections = document.querySelectorAll('.section');
   const points = document.querySelectorAll('.point');
   const pointCurrent = document.querySelector('.point-current');
@@ -88,9 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   sections.forEach(section => observer.observe(section));
-});
 
-const sections = document.querySelectorAll('section');
+
 const iiititle = document.querySelector('.iiititle');
 
 const titleObserver = new IntersectionObserver((entries) => {
@@ -112,6 +110,23 @@ sections.forEach(section => {
     titleObserver.observe(section);
 });
 
+// スクロールを無効にする関数
+function disableScroll(event) {
+  event.preventDefault();
+}
+
+// スクロールを無効にする
+function disableScrollEvent() {
+  window.addEventListener('scroll', disableScroll, { passive: false });
+  window.addEventListener('wheel', disableScroll, { passive: false });
+}
+
+// スクロールを再び有効にする
+function enableScroll() {
+  window.removeEventListener('scroll', disableScroll);
+  window.removeEventListener('wheel', disableScroll);
+}
+
 const firstAnime = document.getElementById('first-anime')
 const topSection = document.querySelector('.top');
 const aaa = document.querySelector('.aaa');
@@ -119,10 +134,16 @@ const title = document.querySelector('.title');
 
 const topObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
+   
     if (entry.isIntersecting && firstAnime.style.display === 'none') {
+
+      disableScrollEvent();
       topSection.classList.add('top--change');
       aaa.classList.add('aaa--change');
       title.classList.add('title-show');
+      topSection.addEventListener('animationend', () => {
+        enableScroll();
+    });
     } else {
       topSection.classList.remove('top--change');
       aaa.classList.remove('aaa--change');
@@ -148,6 +169,7 @@ function monitorScrollForAnimation() {
   const productSection = document.querySelector('#product');
   const elementsToHide = document.querySelectorAll('.grade, .about-img, .iii');
   const threeJsContainer = document.querySelector('#threejs-container');
+  const wrapper = document.querySelector('.wp');
 
   function hideElements() {
     elementsToHide.forEach(el => el.classList.add('hidden'));
@@ -171,14 +193,22 @@ function monitorScrollForAnimation() {
 
           if (sectionId === 'about' && currentSection === 'top' && !animationDiv.classList.contains('animation-start')) {
             fromTopToAbout = true; // top から about への遷移を記録
+            wrapper.scrollTo({ top: 0, behavior: 'smooth' }); 
+            disableScrollEvent();
             hideElements();
             animationDiv.classList.add('animation-start');
+            scrollBtn.classList.remove('scroll-btn--show');
             animationDiv.classList.remove('animation');
+
             animationDiv.addEventListener('animationend', function() {
+              scrollBtn.classList.add('scroll-btn--show');
               showElements();
               animationDiv.classList.remove('animation-start');
               animationDiv.classList.add('animation');
-              initializeAboutObserver();
+              enableScroll();
+              setTimeout(() => {
+                initializeAboutObserver();
+              }, 100); 
             }, { once: true });
           } else if (sectionId === 'about' && currentSection === 'product') {
             fromTopToAbout = false; // product からの遷移なのでリセット
@@ -213,16 +243,13 @@ function initializeAboutObserver() {
       if (entry.isIntersecting) {
         // top から about への遷移であれば初期化する
         if (fromTopToAbout || !aboutSceneInitialized) {
-          clearScene('threejs-container');
           aboutScene('threejs-container');
           aboutSceneInitialized = true;
         }
-
         iii.classList.add('iii--change');
         grade.classList.remove('grade--none');
         aboutImg.forEach(img => {
           img.classList.remove('img--none');
-          img.classList.add('fuwafuwa');
       });
         entry.target.classList.add('is-animated');
       } else {
@@ -230,7 +257,6 @@ function initializeAboutObserver() {
         grade.classList.add('grade--none');
         aboutImg.forEach(img => {
           img.classList.add('img--none');
-          img.classList.remove('fuwafuwa');
       });
         clearScene('threejs-container');
         aboutSceneInitialized = false; 
@@ -255,9 +281,13 @@ const productImg = document.querySelectorAll('.product-img');
 const productObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
+      disableScrollEvent();
       productScene('threejs-container2');
       uuu.classList.add('uuu--show');
       productImg.forEach(img => img.classList.remove('img--none'));
+      uuu.addEventListener('animationend', () => {
+        enableScroll();
+    });
     } else {
       clearScene('threejs-container2');
       uuu.classList.remove('uuu--show');
@@ -289,8 +319,11 @@ const snsImg = document.querySelectorAll('.sns-img');
 const naviObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      tsuchiPic.classList.add('tuchipic--show');
-      tuchionlyPic.classList.add('tuchionlypic--show');
+      disableScrollEvent();
+      setTimeout(function() {
+        tsuchiPic.classList.add('tuchipic--show');
+        tuchionlyPic.classList.add('tuchionlypic--show');
+      }, 1500);
       tsuchiPic.addEventListener('animationend', function() {
         edahaPic.classList.add('edahapic--show');
         setTimeout(function() {
@@ -310,6 +343,7 @@ const naviObserver = new IntersectionObserver(entries => {
           snsImg.forEach((link) => {
             link.style.cursor = 'pointer';
           });
+          enableScroll();
         });
       });
       scrollBtn.classList.remove('scroll-btn--show');
@@ -340,15 +374,25 @@ if (naviSection) {
 
 const herbSection = document.getElementById('herb');
 const content = document.querySelector('.content');
+const eee = document.querySelector('.eee');
 let animationInProgress = false;
+let hasEnteredHerbSection = false; // herbセクションに入ったことを示すフラグ
 
 const herbObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      herbScene('threejs-container3');
-      content.style.position = 'fixed';
       window.addEventListener('wheel', handleMouseWheel, { passive: false });
+      hasEnteredHerbSection = true;
+      eee.classList.add('eee--show');
+      setTimeout(() => {
+        herbScene('threejs-container3');
+      }, 100);
+      content.style.position = 'fixed';
+      topSection.addEventListener('animationend', () => {
+        enableScroll();
+    });
       } else {
+        hasEnteredHerbSection = false;
         clearScene('threejs-container3');
         window.removeEventListener('wheel', handleMouseWheel);
         clearParticles();
@@ -380,8 +424,9 @@ function handleMouseWheel(event) {
       previousSection.scrollIntoView({ behavior: 'smooth' });
     }
   } else if (event.deltaY > 0) {
-    if (nextSection && nextSection.id === 'navi') {
+    if (hasEnteredHerbSection && nextSection && nextSection.id === 'navi') {
       content.style.scrollSnapType = 'none';
+      eee.classList.remove('eee--show');
       animateHerbSection(() => {
         content.style.scrollSnapType = 'y mandatory';
         content.style.position = 'relative';
@@ -394,7 +439,7 @@ function handleMouseWheel(event) {
 function scrollToNextSection() {
   const nextSection = herbSection.nextElementSibling;
   if (nextSection) {
-    nextSection.scrollIntoView({ behavior: 'smooth' });
+      nextSection.scrollIntoView({ behavior: 'smooth' });
   }
 }
 
@@ -414,19 +459,22 @@ scrollBtn2.addEventListener('click', function() {
   setTimeout(function() {
     returnTopTitle.classList.remove('returntoptitle');
     returnTopTitle.classList.add('returntoptitle--show');
-    document.querySelector('.content').scrollTo({
-      top: 0,
-      behavior: 'smooth'
-  });
+    document.querySelector('.content').scrollTo({ top: 0, behavior: 'smooth'});
   }, 1000);
+
 
   setTimeout(function() {
       returnTopTitle.classList.add('returntoptitle');
       returnTopTitle.classList.remove('returntoptitle--show');
-      resetClasses();
-      naviSection.classList.remove('animationtop');
-      setTimeout(function() {
+  
+        resetClasses();
+        currentSectionIndex = -1;
+        updatePointCurrentPosition();
+        updateNavActiveClass(currentSectionIndex);
+        updateLineColors();
+        naviSection.classList.remove('animationtop');
         menu.classList.add('menu-show');
+      setTimeout(function() {
         scrollBtn.classList.add('scroll-btn--show');
       }, 2000);
   }, 2500);

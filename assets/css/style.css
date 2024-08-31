@@ -301,11 +301,16 @@ ol > li {
   }
 }
 .content {
+  background: linear-gradient(to bottom, #e5cca6 0%, #e5cca6 60%, #e5cca6 100%);
   height: 100vh;
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;
   scroll-snap-type: y mandatory;
+  -ms-overflow-style: none;
+}
+.content::-webkit-scrollbar {
+  display: none;
 }
 
 .active {
@@ -386,7 +391,7 @@ ol > li {
   color: #383128;
   background-color: #fff;
   padding: 20px 40px;
-  border-radius: 30px;
+  border-radius: 50px;
   cursor: pointer;
   margin-right: 20px;
   letter-spacing: 0.1em;
@@ -397,8 +402,8 @@ ol > li {
   line-height: 2;
   font-size: 18px;
   font-weight: 600;
-  -webkit-animation: iiichange 1s ease-in forwards;
-          animation: iiichange 1s ease-in forwards;
+  -webkit-animation: iiichange 3s ease-in forwards;
+          animation: iiichange 3s ease-in forwards;
 }
 
 @-webkit-keyframes iiichange {
@@ -739,7 +744,7 @@ ol > li {
   position: fixed;
   top: 10px;
   left: 20px;
-  z-index: 100;
+  z-index: 10;
   opacity: 0;
 }
 
@@ -785,8 +790,12 @@ section {
   width: 100vw;
   height: 100vh;
   background: linear-gradient(to bottom, #e5cca6 0%, #e5cca6 60%, #e5cca6 100%);
-  overflow-y: scroll;
+  overflow-y: hidden;
   scroll-snap-align: start;
+  -ms-overflow-style: none;
+}
+section::-webkit-scrollbar {
+  display: none;
 }
 
 /*== 背景が流れる（斜め） */
@@ -848,6 +857,7 @@ canvas {
   width: 100vw;
   height: 100vh;
   transition: opacity 1s ease-out;
+  z-index: 50;
 }
 
 .title {
@@ -975,10 +985,6 @@ canvas {
   letter-spacing: 0.5em;
 }
 
-.top-bg {
-  background: linear-gradient(to bottom, #e5cca6 0%, #e5cca6 60%, #e5cca6 100%);
-}
-
 .top--change {
   -webkit-animation: topchange 3s ease-in-out forwards;
           animation: topchange 3s ease-in-out forwards;
@@ -1053,7 +1059,7 @@ canvas {
   color: #383128;
   background-color: #fff;
   padding: 20px 64px;
-  border-radius: 30px;
+  border-radius: 50px;
   cursor: pointer;
   position: absolute;
   margin-top: 40px;
@@ -1096,6 +1102,7 @@ canvas {
   left: 20%;
   color: #333;
   z-index: 20;
+  opacity: 0;
 }
 .herb > .eee > h2 {
   font-size: 3.5rem;
@@ -1112,7 +1119,7 @@ canvas {
   color: #383128;
   background-color: #fff;
   padding: 20px 40px;
-  border-radius: 30px;
+  border-radius: 50px;
   cursor: pointer;
   position: absolute;
   margin-top: 40px;
@@ -1120,6 +1127,32 @@ canvas {
   text-align: center;
 }
 
+.eee--show {
+  -webkit-animation: eeechange 2s ease forwards;
+          animation: eeechange 2s ease forwards;
+}
+
+@-webkit-keyframes eeechange {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes eeechange {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 .navi {
   position: relative;
   display: block;
@@ -1133,8 +1166,8 @@ canvas {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 60%;
-  -webkit-animation: navipicshow 2s forwards;
-          animation: navipicshow 2s forwards;
+  -webkit-animation: navipicshow 3s ease-in forwards;
+          animation: navipicshow 3s ease-in forwards;
   pointer-events: none;
 }
 .navi > .tuchionlypic {
@@ -1294,7 +1327,10 @@ canvas {
   0% {
     opacity: 0;
   }
-  50% {
+  30% {
+    opacity: 1;
+  }
+  80% {
     opacity: 1;
   }
   100% {
@@ -1305,7 +1341,10 @@ canvas {
   0% {
     opacity: 0;
   }
-  50% {
+  30% {
+    opacity: 1;
+  }
+  80% {
     opacity: 1;
   }
   100% {
@@ -1674,6 +1713,15 @@ canvas {
   transform: translate(-50%, -50%);
 }
 
+.fade-in {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.fade-in.show {
+  opacity: 1;
+}
+
 /*きらっと光る*/
 .linkbtn {
   position: relative;
@@ -1757,8 +1805,8 @@ canvas {
   position: fixed;
   z-index: 6;
   opacity: 0;
-  -webkit-animation: modelfadeIn 2s forwards;
-          animation: modelfadeIn 2s forwards;
+  -webkit-animation: modelfadeIn 7s forwards;
+          animation: modelfadeIn 7s forwards;
 }
 
 @-webkit-keyframes modelfadeIn {
@@ -1794,18 +1842,13 @@ canvas {
     opacity: 1;
   }
 }
-.fuwafuwa {
-  -webkit-animation: bound 5s forwards ease-in-out;
-          animation: bound 5s forwards ease-in-out;
-}
-
 /* 各要素の fuwafuwa アニメーションを定義 */
 @-webkit-keyframes bound-container1-1 {
   0% {
     transform: translateX(15vw) translateY(-15vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 22.5deg);
   }
   50% {
-    transform: translateX(15vw) translateY(calc(-15vh + 20px)) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 22.5deg);
+    transform: translateX(15vw) translateY(calc(-15vh + 50px)) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 22.5deg);
   }
   100% {
     transform: translateX(15vw) translateY(-15vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 22.5deg);
@@ -1816,7 +1859,7 @@ canvas {
     transform: translateX(15vw) translateY(-15vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 22.5deg);
   }
   50% {
-    transform: translateX(15vw) translateY(calc(-15vh + 20px)) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 22.5deg);
+    transform: translateX(15vw) translateY(calc(-15vh + 50px)) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 22.5deg);
   }
   100% {
     transform: translateX(15vw) translateY(-15vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 22.5deg);
@@ -1827,7 +1870,7 @@ canvas {
     transform: translateX(12vw) translateY(-5vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   50% {
-    transform: translateX(12vw) translateY(calc(-5vh + 20px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
+    transform: translateX(12vw) translateY(calc(-5vh + 50px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   100% {
     transform: translateX(12vw) translateY(-5vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
@@ -1838,7 +1881,7 @@ canvas {
     transform: translateX(12vw) translateY(-5vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   50% {
-    transform: translateX(12vw) translateY(calc(-5vh + 20px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
+    transform: translateX(12vw) translateY(calc(-5vh + 50px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   100% {
     transform: translateX(12vw) translateY(-5vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
@@ -1849,7 +1892,7 @@ canvas {
     transform: translateX(25vw) translateY(20vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   50% {
-    transform: translateX(25vw) translateY(calc(20vh + 20px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
+    transform: translateX(25vw) translateY(calc(20vh + 50px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   100% {
     transform: translateX(25vw) translateY(20vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
@@ -1860,7 +1903,7 @@ canvas {
     transform: translateX(25vw) translateY(20vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   50% {
-    transform: translateX(25vw) translateY(calc(20vh + 20px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
+    transform: translateX(25vw) translateY(calc(20vh + 50px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   100% {
     transform: translateX(25vw) translateY(20vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
@@ -1871,7 +1914,7 @@ canvas {
     transform: translateX(38vw) translateY(-15vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   50% {
-    transform: translateX(38vw) translateY(calc(-15vh + 20px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
+    transform: translateX(38vw) translateY(calc(-15vh + 50px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   100% {
     transform: translateX(38vw) translateY(-15vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
@@ -1882,7 +1925,7 @@ canvas {
     transform: translateX(38vw) translateY(-15vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   50% {
-    transform: translateX(38vw) translateY(calc(-15vh + 20px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
+    transform: translateX(38vw) translateY(calc(-15vh + 50px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   100% {
     transform: translateX(38vw) translateY(-15vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
@@ -1893,7 +1936,7 @@ canvas {
     transform: translateX(35vw) translateY(5vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, -45deg);
   }
   50% {
-    transform: translateX(35vw) translateY(calc(5vh + 20px)) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, -45deg);
+    transform: translateX(35vw) translateY(calc(5vh + 50px)) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, -45deg);
   }
   100% {
     transform: translateX(35vw) translateY(5vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, -45deg);
@@ -1904,7 +1947,7 @@ canvas {
     transform: translateX(35vw) translateY(5vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, -45deg);
   }
   50% {
-    transform: translateX(35vw) translateY(calc(5vh + 20px)) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, -45deg);
+    transform: translateX(35vw) translateY(calc(5vh + 50px)) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, -45deg);
   }
   100% {
     transform: translateX(35vw) translateY(5vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, -45deg);
@@ -1915,7 +1958,7 @@ canvas {
     transform: translateX(20vw) translateY(-20vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
   }
   50% {
-    transform: translateX(20vw) translateY(calc(-20vh + 20px)) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
+    transform: translateX(20vw) translateY(calc(-20vh + 50px)) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
   }
   100% {
     transform: translateX(20vw) translateY(-20vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
@@ -1926,7 +1969,7 @@ canvas {
     transform: translateX(20vw) translateY(-20vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
   }
   50% {
-    transform: translateX(20vw) translateY(calc(-20vh + 20px)) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
+    transform: translateX(20vw) translateY(calc(-20vh + 50px)) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
   }
   100% {
     transform: translateX(20vw) translateY(-20vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
@@ -1937,7 +1980,7 @@ canvas {
     transform: translateX(40vw) translateY(5vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
   }
   50% {
-    transform: translateX(40vw) translateY(calc(5vh + 20px)) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
+    transform: translateX(40vw) translateY(calc(5vh + 50px)) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
   }
   100% {
     transform: translateX(40vw) translateY(5vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
@@ -1948,7 +1991,7 @@ canvas {
     transform: translateX(40vw) translateY(5vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
   }
   50% {
-    transform: translateX(40vw) translateY(calc(5vh + 20px)) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
+    transform: translateX(40vw) translateY(calc(5vh + 50px)) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
   }
   100% {
     transform: translateX(40vw) translateY(5vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
@@ -1959,7 +2002,7 @@ canvas {
     transform: translateX(23vw) translateY(-20vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
   }
   50% {
-    transform: translateX(23vw) translateY(calc(-20vh + 20px)) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
+    transform: translateX(23vw) translateY(calc(-20vh + 50px)) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
   }
   100% {
     transform: translateX(23vw) translateY(-20vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
@@ -1970,7 +2013,7 @@ canvas {
     transform: translateX(23vw) translateY(-20vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
   }
   50% {
-    transform: translateX(23vw) translateY(calc(-20vh + 20px)) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
+    transform: translateX(23vw) translateY(calc(-20vh + 50px)) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
   }
   100% {
     transform: translateX(23vw) translateY(-20vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
@@ -1981,7 +2024,7 @@ canvas {
     transform: translateX(5vw) translateY(-5vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 30deg);
   }
   50% {
-    transform: translateX(5vw) translateY(calc(-5vh + 20px)) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 30deg);
+    transform: translateX(5vw) translateY(calc(-5vh + 50px)) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 30deg);
   }
   100% {
     transform: translateX(5vw) translateY(-5vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 30deg);
@@ -1992,7 +2035,7 @@ canvas {
     transform: translateX(5vw) translateY(-5vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 30deg);
   }
   50% {
-    transform: translateX(5vw) translateY(calc(-5vh + 20px)) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 30deg);
+    transform: translateX(5vw) translateY(calc(-5vh + 50px)) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 30deg);
   }
   100% {
     transform: translateX(5vw) translateY(-5vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 30deg);
@@ -2003,7 +2046,7 @@ canvas {
     transform: translateX(3vw) translateY(-15vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   50% {
-    transform: translateX(3vw) translateY(calc(-15vh + 20px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
+    transform: translateX(3vw) translateY(calc(-15vh + 50px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   100% {
     transform: translateX(3vw) translateY(-15vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
@@ -2014,7 +2057,7 @@ canvas {
     transform: translateX(3vw) translateY(-15vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   50% {
-    transform: translateX(3vw) translateY(calc(-15vh + 20px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
+    transform: translateX(3vw) translateY(calc(-15vh + 50px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   100% {
     transform: translateX(3vw) translateY(-15vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
@@ -2025,7 +2068,7 @@ canvas {
     transform: translateX(19vw) translateY(8vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   50% {
-    transform: translateX(19vw) translateY(calc(8vh + 20px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
+    transform: translateX(19vw) translateY(calc(8vh + 50px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   100% {
     transform: translateX(19vw) translateY(8vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
@@ -2036,7 +2079,7 @@ canvas {
     transform: translateX(19vw) translateY(8vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   50% {
-    transform: translateX(19vw) translateY(calc(8vh + 20px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
+    transform: translateX(19vw) translateY(calc(8vh + 50px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   100% {
     transform: translateX(19vw) translateY(8vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
@@ -2047,7 +2090,7 @@ canvas {
     transform: translateX(38vw) translateY(5vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   50% {
-    transform: translateX(38vw) translateY(calc(5vh + 20px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
+    transform: translateX(38vw) translateY(calc(5vh + 50px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   100% {
     transform: translateX(38vw) translateY(5vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
@@ -2058,7 +2101,7 @@ canvas {
     transform: translateX(38vw) translateY(5vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   50% {
-    transform: translateX(38vw) translateY(calc(5vh + 20px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
+    transform: translateX(38vw) translateY(calc(5vh + 50px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   }
   100% {
     transform: translateX(38vw) translateY(5vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
@@ -2069,7 +2112,7 @@ canvas {
     transform: translateX(38vw) translateY(5vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -45deg);
   }
   50% {
-    transform: translateX(38vw) translateY(calc(5vh + 20px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -45deg);
+    transform: translateX(38vw) translateY(calc(5vh + 50px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -45deg);
   }
   100% {
     transform: translateX(38vw) translateY(5vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -45deg);
@@ -2080,7 +2123,7 @@ canvas {
     transform: translateX(38vw) translateY(5vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -45deg);
   }
   50% {
-    transform: translateX(38vw) translateY(calc(5vh + 20px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -45deg);
+    transform: translateX(38vw) translateY(calc(5vh + 50px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -45deg);
   }
   100% {
     transform: translateX(38vw) translateY(5vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -45deg);
@@ -2091,7 +2134,7 @@ canvas {
     transform: translateX(2vw) translateY(-10vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -10deg);
   }
   50% {
-    transform: translateX(2vw) translateY(calc(-10vh + 20px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -10deg);
+    transform: translateX(2vw) translateY(calc(-10vh + 50px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -10deg);
   }
   100% {
     transform: translateX(2vw) translateY(-10vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -10deg);
@@ -2102,7 +2145,7 @@ canvas {
     transform: translateX(2vw) translateY(-10vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -10deg);
   }
   50% {
-    transform: translateX(2vw) translateY(calc(-10vh + 20px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -10deg);
+    transform: translateX(2vw) translateY(calc(-10vh + 50px)) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -10deg);
   }
   100% {
     transform: translateX(2vw) translateY(-10vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -10deg);
@@ -2113,7 +2156,7 @@ canvas {
     transform: translateX(18vw) translateY(-5vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
   }
   50% {
-    transform: translateX(18vw) translateY(calc(-5vh + 20px)) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
+    transform: translateX(18vw) translateY(calc(-5vh + 50px)) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
   }
   100% {
     transform: translateX(18vw) translateY(-5vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
@@ -2124,7 +2167,7 @@ canvas {
     transform: translateX(18vw) translateY(-5vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
   }
   50% {
-    transform: translateX(18vw) translateY(calc(-5vh + 20px)) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
+    transform: translateX(18vw) translateY(calc(-5vh + 50px)) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
   }
   100% {
     transform: translateX(18vw) translateY(-5vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
@@ -2135,7 +2178,7 @@ canvas {
     transform: translateX(24vw) translateY(-16vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
   }
   50% {
-    transform: translateX(24vw) translateY(calc(-16vh + 20px)) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
+    transform: translateX(24vw) translateY(calc(-16vh + 50px)) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
   }
   100% {
     transform: translateX(24vw) translateY(-16vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
@@ -2146,7 +2189,7 @@ canvas {
     transform: translateX(24vw) translateY(-16vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
   }
   50% {
-    transform: translateX(24vw) translateY(calc(-16vh + 20px)) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
+    transform: translateX(24vw) translateY(calc(-16vh + 50px)) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
   }
   100% {
     transform: translateX(24vw) translateY(-16vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
@@ -2164,32 +2207,32 @@ canvas {
   /* 初期位置を設定 */
   transform: translateX(15vw) translateY(-15vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 22.5deg);
   /* アニメーションの設定 */
-  -webkit-animation: opacityanime 1s forwards ease-in-out, bound-container1-1 3s forwards ease-in-out 1s, float-about-1 3s ease-in-out infinite 4s;
-          animation: opacityanime 1s forwards ease-in-out, bound-container1-1 3s forwards ease-in-out 1s, float-about-1 3s ease-in-out infinite 4s;
+  -webkit-animation: opacityanime 5s forwards ease-in-out, bound-container1-1 3s forwards ease-in-out 1s, float-about-1 3s ease-in-out infinite 4s;
+          animation: opacityanime 5s forwards ease-in-out, bound-container1-1 3s forwards ease-in-out 1s, float-about-1 3s ease-in-out infinite 4s;
 }
 #threejs-container > .about-img:nth-of-type(2) {
   width: 80px;
   /* 初期位置を設定 */
   transform: translateX(12vw) translateY(-5vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   /* アニメーションの設定 */
-  -webkit-animation: opacityanime 1s forwards ease-in-out, bound-container1-2 3s forwards ease-in-out 1s, float-about-2 3s ease-in-out infinite 4s;
-          animation: opacityanime 1s forwards ease-in-out, bound-container1-2 3s forwards ease-in-out 1s, float-about-2 3s ease-in-out infinite 4s;
+  -webkit-animation: opacityanime 5s forwards ease-in-out, bound-container1-2 3s forwards ease-in-out 1s, float-about-2 3s ease-in-out infinite 4s;
+          animation: opacityanime 5s forwards ease-in-out, bound-container1-2 3s forwards ease-in-out 1s, float-about-2 3s ease-in-out infinite 4s;
 }
 #threejs-container > .about-img:nth-of-type(3) {
   width: 80px;
   /* 初期位置を設定 */
   transform: translateX(25vw) translateY(20vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   /* アニメーションの設定 */
-  -webkit-animation: opacityanime 1s forwards ease-in-out, bound-container1-3 3s forwards ease-in-out 1s, float-about-3 3s ease-in-out infinite 4s;
-          animation: opacityanime 1s forwards ease-in-out, bound-container1-3 3s forwards ease-in-out 1s, float-about-3 3s ease-in-out infinite 4s;
+  -webkit-animation: opacityanime 5s forwards ease-in-out, bound-container1-3 3s forwards ease-in-out 1s, float-about-3 3s ease-in-out infinite 4s;
+          animation: opacityanime 5s forwards ease-in-out, bound-container1-3 3s forwards ease-in-out 1s, float-about-3 3s ease-in-out infinite 4s;
 }
 #threejs-container > .about-img:nth-of-type(4) {
   width: 80px;
   /* 初期位置を設定 */
   transform: translateX(38vw) translateY(-15vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
   /* アニメーションの設定 */
-  -webkit-animation: opacityanime 1s forwards ease-in-out, bound-container1-4 3s forwards ease-in-out 1s, float-about-4 3s ease-in-out infinite 4s;
-          animation: opacityanime 1s forwards ease-in-out, bound-container1-4 3s forwards ease-in-out 1s, float-about-4 3s ease-in-out infinite 4s;
+  -webkit-animation: opacityanime 5s forwards ease-in-out, bound-container1-4 3s forwards ease-in-out 1s, float-about-4 3s ease-in-out infinite 4s;
+          animation: opacityanime 5s forwards ease-in-out, bound-container1-4 3s forwards ease-in-out 1s, float-about-4 3s ease-in-out infinite 4s;
 }
 #threejs-container > .about-img:nth-of-type(5) {
   width: 200px;
@@ -2197,8 +2240,8 @@ canvas {
   /* 初期位置を設定 */
   transform: translateX(35vw) translateY(5vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, -45deg);
   /* アニメーションの設定 */
-  -webkit-animation: opacityanime 1s forwards ease-in-out, bound-container1-5 3s forwards ease-in-out 1s, float-about-5 3s ease-in-out infinite 4s;
-          animation: opacityanime 1s forwards ease-in-out, bound-container1-5 3s forwards ease-in-out 1s, float-about-5 3s ease-in-out infinite 4s;
+  -webkit-animation: opacityanime 5s forwards ease-in-out, bound-container1-5 3s forwards ease-in-out 1s, float-about-5 3s ease-in-out infinite 4s;
+          animation: opacityanime 5s forwards ease-in-out, bound-container1-5 3s forwards ease-in-out 1s, float-about-5 3s ease-in-out infinite 4s;
 }
 #threejs-container > .about-img:nth-of-type(6) {
   width: 150px;
@@ -2206,8 +2249,8 @@ canvas {
   /* 初期位置を設定 */
   transform: translateX(20vw) translateY(-20vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
   /* アニメーションの設定 */
-  -webkit-animation: opacityanime 1s forwards ease-in-out, bound-container1-6 3s forwards ease-in-out 1s, float-about-6 3s ease-in-out infinite 4s;
-          animation: opacityanime 1s forwards ease-in-out, bound-container1-6 3s forwards ease-in-out 1s, float-about-6 3s ease-in-out infinite 4s;
+  -webkit-animation: opacityanime 5s forwards ease-in-out, bound-container1-6 3s forwards ease-in-out 1s, float-about-6 3s ease-in-out infinite 4s;
+          animation: opacityanime 5s forwards ease-in-out, bound-container1-6 3s forwards ease-in-out 1s, float-about-6 3s ease-in-out infinite 4s;
 }
 #threejs-container > .about-img:nth-of-type(7) {
   width: 100px;
@@ -2215,8 +2258,8 @@ canvas {
   /* 初期位置を設定 */
   transform: translateX(40vw) translateY(5vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
   /* アニメーションの設定 */
-  -webkit-animation: opacityanime 1s forwards ease-in-out, bound-container1-7 3s forwards ease-in-out 1s, float-about-7 3s ease-in-out infinite 4s;
-          animation: opacityanime 1s forwards ease-in-out, bound-container1-7 3s forwards ease-in-out 1s, float-about-7 3s ease-in-out infinite 4s;
+  -webkit-animation: opacityanime 5s forwards ease-in-out, bound-container1-7 3s forwards ease-in-out 1s, float-about-7 3s ease-in-out infinite 4s;
+          animation: opacityanime 5s forwards ease-in-out, bound-container1-7 3s forwards ease-in-out 1s, float-about-7 3s ease-in-out infinite 4s;
 }
 #threejs-container > .about-img:nth-of-type(8) {
   width: 80px;
@@ -2224,8 +2267,8 @@ canvas {
   /* 初期位置を設定 */
   transform: translateX(23vw) translateY(-20vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
   /* アニメーションの設定 */
-  -webkit-animation: opacityanime 1s forwards ease-in-out, bound-container1-8 3s forwards ease-in-out 1s, float-about-8 3s ease-in-out infinite 4s;
-          animation: opacityanime 1s forwards ease-in-out, bound-container1-8 3s forwards ease-in-out 1s, float-about-8 3s ease-in-out infinite 4s;
+  -webkit-animation: opacityanime 5s forwards ease-in-out, bound-container1-8 3s forwards ease-in-out 1s, float-about-8 3s ease-in-out infinite 4s;
+          animation: opacityanime 5s forwards ease-in-out, bound-container1-8 3s forwards ease-in-out 1s, float-about-8 3s ease-in-out infinite 4s;
 }
 
 #threejs-container2 > .product-img {
@@ -2238,54 +2281,54 @@ canvas {
   width: 400px;
   height: 400px;
   transform: translateX(5vw) translateY(-5vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, 30deg);
-  -webkit-animation: opacityanime 1s forwards ease-in-out, bound-container2-1 3s forwards ease-in-out 1s, float-product-1 3s ease-in-out infinite 4s;
-          animation: opacityanime 1s forwards ease-in-out, bound-container2-1 3s forwards ease-in-out 1s, float-product-1 3s ease-in-out infinite 4s;
+  -webkit-animation: opacityanime 7s forwards ease-in-out, bound-container2-1 3s forwards ease-in-out 1s, float-product-1 3s ease-in-out infinite 4s;
+          animation: opacityanime 7s forwards ease-in-out, bound-container2-1 3s forwards ease-in-out 1s, float-product-1 3s ease-in-out infinite 4s;
 }
 #threejs-container2 > .product-img:nth-of-type(2) {
   width: 80px;
   transform: translateX(3vw) translateY(-15vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
-  -webkit-animation: opacityanime 1s forwards ease-in-out, bound-container2-2 3s forwards ease-in-out 1s, float-product-2 3s ease-in-out infinite 4s;
-          animation: opacityanime 1s forwards ease-in-out, bound-container2-2 3s forwards ease-in-out 1s, float-product-2 3s ease-in-out infinite 4s;
+  -webkit-animation: opacityanime 7s forwards ease-in-out, bound-container2-2 3s forwards ease-in-out 1s, float-product-2 3s ease-in-out infinite 4s;
+          animation: opacityanime 7s forwards ease-in-out, bound-container2-2 3s forwards ease-in-out 1s, float-product-2 3s ease-in-out infinite 4s;
 }
 #threejs-container2 > .product-img:nth-of-type(3) {
   width: 80px;
   transform: translateX(19vw) translateY(8vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
-  -webkit-animation: opacityanime 1s forwards ease-in-out, bound-container2-3 3s forwards ease-in-out 1s, float-product-3 3s ease-in-out infinite 4s;
-          animation: opacityanime 1s forwards ease-in-out, bound-container2-3 3s forwards ease-in-out 1s, float-product-3 3s ease-in-out infinite 4s;
+  -webkit-animation: opacityanime 7s forwards ease-in-out, bound-container2-3 3s forwards ease-in-out 1s, float-product-3 3s ease-in-out infinite 4s;
+          animation: opacityanime 7s forwards ease-in-out, bound-container2-3 3s forwards ease-in-out 1s, float-product-3 3s ease-in-out infinite 4s;
 }
 #threejs-container2 > .product-img:nth-of-type(4) {
   width: 80px;
   transform: translateX(38vw) translateY(5vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, 0deg);
-  -webkit-animation: opacityanime 1s forwards ease-in-out, bound-container2-4 3s forwards ease-in-out 1s, float-product-4 3s ease-in-out infinite 4s;
-          animation: opacityanime 1s forwards ease-in-out, bound-container2-4 3s forwards ease-in-out 1s, float-product-4 3s ease-in-out infinite 4s;
+  -webkit-animation: opacityanime 7s forwards ease-in-out, bound-container2-4 3s forwards ease-in-out 1s, float-product-4 3s ease-in-out infinite 4s;
+          animation: opacityanime 7s forwards ease-in-out, bound-container2-4 3s forwards ease-in-out 1s, float-product-4 3s ease-in-out infinite 4s;
 }
 #threejs-container2 > .product-img:nth-of-type(5) {
   width: 200px;
   height: 200px;
   transform: translateX(38vw) translateY(5vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -45deg);
-  -webkit-animation: opacityanime 1s forwards ease-in-out, bound-container2-5 3s forwards ease-in-out 1s, float-product-5 3s ease-in-out infinite 4s;
-          animation: opacityanime 1s forwards ease-in-out, bound-container2-5 3s forwards ease-in-out 1s, float-product-5 3s ease-in-out infinite 4s;
+  -webkit-animation: opacityanime 7s forwards ease-in-out, bound-container2-5 3s forwards ease-in-out 1s, float-product-5 3s ease-in-out infinite 4s;
+          animation: opacityanime 7s forwards ease-in-out, bound-container2-5 3s forwards ease-in-out 1s, float-product-5 3s ease-in-out infinite 4s;
 }
 #threejs-container2 > .product-img:nth-of-type(6) {
   width: 150px;
   height: 150px;
   transform: translateX(2vw) translateY(-10vh) rotate3d(1, 0, 0, 0deg) rotate3d(0, 0, 1, -10deg);
-  -webkit-animation: opacityanime 1s forwards ease-in-out, bound-container2-6 3s forwards ease-in-out 1s, float-product-6 3s ease-in-out infinite 4s;
-          animation: opacityanime 1s forwards ease-in-out, bound-container2-6 3s forwards ease-in-out 1s, float-product-6 3s ease-in-out infinite 4s;
+  -webkit-animation: opacityanime 7s forwards ease-in-out, bound-container2-6 3s forwards ease-in-out 1s, float-product-6 3s ease-in-out infinite 4s;
+          animation: opacityanime 7s forwards ease-in-out, bound-container2-6 3s forwards ease-in-out 1s, float-product-6 3s ease-in-out infinite 4s;
 }
 #threejs-container2 > .product-img:nth-of-type(7) {
   width: 100px;
   height: 50px;
   transform: translateX(18vw) translateY(-5vh) rotate3d(1, 0, 0, 22.5deg) rotate3d(0, 0, 1, 60deg);
-  -webkit-animation: opacityanime 1s forwards ease-in-out, bound-container2-7 3s forwards ease-in-out 1s, float-product-7 3s ease-in-out infinite 4s;
-          animation: opacityanime 1s forwards ease-in-out, bound-container2-7 3s forwards ease-in-out 1s, float-product-7 3s ease-in-out infinite 4s;
+  -webkit-animation: opacityanime 7s forwards ease-in-out, bound-container2-7 3s forwards ease-in-out 1s, float-product-7 3s ease-in-out infinite 4s;
+          animation: opacityanime 7s forwards ease-in-out, bound-container2-7 3s forwards ease-in-out 1s, float-product-7 3s ease-in-out infinite 4s;
 }
 #threejs-container2 > .product-img:nth-of-type(8) {
   width: 80px;
   height: 50px;
   transform: translateX(24vw) translateY(-16vh) rotate3d(1, 0, 0, 30deg) rotate3d(0, 0, 1, -45deg);
-  -webkit-animation: opacityanime 1s forwards ease-in-out, bound-container2-8 3s forwards ease-in-out 1s, float-product-8 3s ease-in-out infinite 4s;
-          animation: opacityanime 1s forwards ease-in-out, bound-container2-8 3s forwards ease-in-out 1s, float-product-8 3s ease-in-out infinite 4s;
+  -webkit-animation: opacityanime 7s forwards ease-in-out, bound-container2-8 3s forwards ease-in-out 1s, float-product-8 3s ease-in-out infinite 4s;
+          animation: opacityanime 7s forwards ease-in-out, bound-container2-8 3s forwards ease-in-out 1s, float-product-8 3s ease-in-out infinite 4s;
 }
 
 @-webkit-keyframes float-about-1 {
@@ -2643,6 +2686,11 @@ canvas {
 }
 #threejs-container3 {
   position: relative;
+}
+#threejs-container3 > canvas {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
 }
 
 #particle-canvas {

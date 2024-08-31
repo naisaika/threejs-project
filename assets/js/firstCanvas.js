@@ -1,3 +1,5 @@
+'use strict';
+
 export function firstCanvas() {
     const rand = function(min, max) {
       return Math.random() * (max - min) + min;
@@ -8,6 +10,14 @@ export function firstCanvas() {
   
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+
+    // スクロールを無効にする関数
+    function disableScroll(event) {
+        event.preventDefault();
+    }
+    // スクロール無効化を設定
+    window.addEventListener('scroll', disableScroll, { passive: false });
+    window.addEventListener('wheel', disableScroll, { passive: false });
   
     window.addEventListener('resize', function() {
       canvas.width = window.innerWidth;
@@ -134,6 +144,8 @@ export function firstCanvas() {
   
     // 3秒後にキャンバスをフェードアウトさせる
     setTimeout(function() {
+      window.addEventListener('scroll', disableScroll, { passive: false });
+      window.addEventListener('wheel', disableScroll, { passive: false });
       canvas.style.opacity = '0'; // フェードアウトを開始
       const top = document.querySelector('.top');
       const aaa = document.querySelector('.aaa');
@@ -154,8 +166,13 @@ export function firstCanvas() {
               window.cancelAnimationFrame(animationId);
           }
           isCanvasAnimating = false; // アニメーション終了時にフラグを更新
+
       }, 1000);
-  }, 3000);
+      top.addEventListener('animationend', () => {
+        window.removeEventListener('scroll', disableScroll);
+        window.removeEventListener('wheel', disableScroll);
+      });
+    }, 3000);
   }
   
   const text = document.querySelector('.first-text');
@@ -163,5 +180,6 @@ export function firstCanvas() {
   setInterval(() => {
     text.classList.add('is-active');
   }, 100);
+
   
 

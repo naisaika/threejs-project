@@ -1,3 +1,5 @@
+'use strict';
+
 import * as THREE from "three";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
@@ -49,7 +51,7 @@ function loadModel(url, { scale, position, rotation, rotationSpeed, maxRotation,
     const duration = 3800; // アニメーションの総時間 (ミリ秒)
     const initialY = gltf.scene.position.y;
     const amplitude = 10;
-    const speed = 0.001;
+    const speed = 0.002;
 
     function animate() {
       const elapsedTime = Date.now() - startTime;
@@ -148,7 +150,7 @@ function aboutScene(containerId) {
         scale: [48, 55, 50],
         position: [220, -160, 50],
         rotation: { x: -Math.PI / 12, y: Math.PI, z: -Math.PI / 8 },
-        rotationSpeed: 0.04,
+        rotationSpeed: 0.06,
         maxRotation: Math.PI * 3.9,
         moveSpeed: 0.3, 
         moveDistance: 120, // 移動する距離
@@ -164,10 +166,10 @@ function productScene(containerId) {
     {
       url: 'assets/img/tooth2.glb',
       settings: {
-        scale: [50, 60, 50],
-        position: [260, -200, 40],
+        scale: [35, 42, 35],
+        position: [200, -200, 40],
         rotation: { x: -Math.PI / 12, z: -Math.PI / 10 },
-        rotationSpeed: 0.1,
+        rotationSpeed: 0.05,
         maxRotation: Math.PI * 1.9,
         moveSpeed: 0.3, 
         moveDistance: 100, // 移動する距離
@@ -176,13 +178,13 @@ function productScene(containerId) {
     {
       url: 'assets/img/toothpink.glb',
       settings: {
-        scale: [40, 45, 40],
+        scale: [38, 42, 38],
         position: [120, -220, 40],
         rotation: { x: -Math.PI / 12, z: Math.PI / 20 },
-        rotationSpeed: 0.1,
+        rotationSpeed: 0.05,
         maxRotation: Math.PI * 1.9,
         moveSpeed: 0.3, 
-        moveDistance: 100, // 移動する距離
+        moveDistance: 80, // 移動する距離
       }
     },
   ];
@@ -226,6 +228,7 @@ function herbScene(containerId) {
   animationRunning = true;
 
   scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0xffffff, 450, 800);
   camera = new THREE.PerspectiveCamera(
     50,
     window.innerWidth / window.innerHeight,
@@ -249,16 +252,16 @@ function herbScene(containerId) {
 
   const scaleFactors = {
     'momiji.glb': 5.0, 
-    'toothgreenkinomi.glb': 1.0, 
-    'akaimi.glb': 0.4,     
-    'minikinoko.glb': 1.0    
+    'toothgreenkinomi.glb': 1.5, 
+    'akaimi.glb': 0.5,     
+    'minikinoko.glb': 1.2    
   };
 
   const modelCounts = {
     'momiji.glb': 15,
-    'toothgreenkinomi.glb': 18,
-    'akaimi.glb': 18,
-    'minikinoko.glb': 18
+    'toothgreenkinomi.glb': 15,
+    'akaimi.glb': 15,
+    'minikinoko.glb': 15
   };
 
   loadModels((models) => {
@@ -278,9 +281,9 @@ function herbScene(containerId) {
 
         // モデルの初期位置設定
         model.position.set(
-          Math.random() * 400,
+          Math.random() * 400 + 50,
           Math.random() * 400 - 50,
-          Math.random() * 400 - 200 
+          Math.random() * 1000 - 400
         );
 
         // 初期方向をランダムに設定
@@ -299,6 +302,7 @@ function herbScene(containerId) {
     let startTime = Date.now();
 
     function animate() {
+
       if (!animationRunning) return;
       requestAnimationFrame(animate);
 
@@ -315,9 +319,8 @@ function herbScene(containerId) {
             startPosition.z + t * (-startPosition.z)
           );
         // 左回りに回転させる
-        model.rotation.y += 0.0008; // Y軸周りに少しずつ回転
+        model.rotation.y += 0.001; // Y軸周りに少しずつ回転
       });
-
       renderer.render(scene, camera);
     }
     animate();
@@ -346,58 +349,68 @@ function animateHerbSection(callback) {
   fadeOut = false; // 必ずリセット
   animationRunning = true; // アニメーションが実行中かどうか
 
+  const originalFog = scene.fog;
+  scene.fog = null; // Disable fog
+
   allModels.forEach(({ model, startPosition }) => {
     model.position.copy(startPosition);
   });
 
   function animate() {
-    if (!animationRunning) return; // アニメーションのキャンセル
+    if (!animationRunning) {
+      scene.fog = originalFog;
+      return;
+    }
     const elapsedTime = (Date.now() - animationStartTime) / animationDuration;
 
-// 3Dモデルを画面の中央に移動させるアニメーション
-if (elapsedTime < 1) {
-  allModels.forEach(({ model, startPosition }) => {
-    model.position.set(
-      (startPosition.x - 150) * (1 - elapsedTime),
-      (startPosition.y - 250) * (1 - elapsedTime),
-      startPosition.z * (1 - elapsedTime)
-    );
-  });
+    // 3Dモデルを画面の中央に移動させるアニメーション
+    if (elapsedTime < 1) {
+      allModels.forEach(({ model, startPosition }) => {
+        model.position.set(
+          (startPosition.x - 150) * (1 - elapsedTime),
+          (startPosition.y - 250) * (1 - elapsedTime),
+          startPosition.z * (1 - elapsedTime)
+        );
+      });
 
-  renderer.render(scene, camera);
-} else if (elapsedTime >= 1 && !moveToOuterStartTime) {
-  // 中心に移動が完了したら、外側に移動するアニメーションを開始
-  moveToCenterStartTime = Date.now();
-  drawParticles();
-  moveToOuterStartTime = Date.now(); // 外側に移動を開始する時間を記録
-} else if (moveToOuterStartTime) {
-  // 外側に移動するアニメーション
-  const moveToOuterElapsedTime = (Date.now() - moveToOuterStartTime) / moveToOuterDuration;
-  
-  if (moveToOuterElapsedTime >= 1) {
-    // アニメーションが完了したら最終位置に設定
-    allModels.forEach(({ model }) => {
-      model.position.set(
-        (model.position.x - centerX) * (1 + moveToOuterElapsedTime) + centerX,
-        (model.position.y - centerY) * (1 + moveToOuterElapsedTime) + centerY,
-        model.position.z
-      );
-    });
     renderer.render(scene, camera);
-    callback();
-    animationRunning = false;
-    return;
+    } else if (elapsedTime >= 1 && !moveToOuterStartTime) {
+      // 中心に移動が完了したら、外側に移動するアニメーションを開始
+      moveToCenterStartTime = Date.now();
+      drawParticles();
+      moveToOuterStartTime = Date.now(); // 外側に移動を開始する時間を記録
+    } else if (moveToOuterStartTime) {
+      // 外側に移動するアニメーション
+      const moveToOuterElapsedTime = (Date.now() - moveToOuterStartTime) / moveToOuterDuration;
+  
+      if (moveToOuterElapsedTime >= 1) {
+        // アニメーションが完了したら最終位置に設定
+        allModels.forEach(({ model }) => {
+          model.position.set(
+            (model.position.x - centerX) * (1 + moveToOuterElapsedTime) + centerX - 500,
+            (model.position.y - centerY) * (1 + moveToOuterElapsedTime) + centerY - 500,
+            model.position.z
+          );
+        });
+        renderer.render(scene, camera);
+        callback();
+        animationRunning = false;
+        return;
+      }
+
+      allModels.forEach(({ model }) => {
+        model.traverse((child) => {
+          if (child.isMesh) {
+            child.material.transparent = true;
+            child.material.opacity = 0;
+          }
+        });
+      });
+
+    renderer.render(scene, camera);
   }
 
-  allModels.forEach(({ model }) => {
-    model.position.x += (model.position.x - centerX) * moveToOuterElapsedTime;
-    model.position.y += (model.position.y - centerY) * moveToOuterElapsedTime;
-  });
-
-  renderer.render(scene, camera);
-}
-
-requestAnimationFrame(animate);
+  requestAnimationFrame(animate);
 }
 
 requestAnimationFrame(animate);
@@ -487,7 +500,7 @@ function drawParticles() {
       ctx.shadowBlur = 30;
       ctx.shadowColor = p.color;
       ctx.fillStyle = p.color;
-      ctx.globalAlpha = 0.5;
+      ctx.globalAlpha = lineAlpha; // パーティクルの透明度を設定
       ctx.fill();
       ctx.closePath();
 
@@ -509,10 +522,12 @@ function drawParticles() {
       fadeOut = true;
     }
 
+    // フェードアウト処理
     if (fadeOut) {
       lineAlpha -= 0.01; // Alpha値の減少量を調整してフェードアウト速度を早める
       if (lineAlpha <= 0) {
         lineAlpha = 0; // 完全に透明になったら止める
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // キャンバスをクリア
         return; // アニメーションを終了
       }
     }
