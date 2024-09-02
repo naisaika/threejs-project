@@ -585,6 +585,5 @@ function clearParticles() {
   lineAlpha = 0.5; 
 }
 
-export {scene, camera, renderer, initScene, 
-  loadModel, renderScene, clearScene, aboutScene, productScene, herbScene,
-  animateHerbSection, initializeParticles, initializeLines, drawParticles, clearParticles}
+export {initScene, clearScene, aboutScene, productScene, herbScene,
+  animateHerbSection, clearParticles}

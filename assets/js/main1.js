@@ -468,10 +468,6 @@ scrollBtn2.addEventListener('click', function() {
       returnTopTitle.classList.remove('returntoptitle--show');
   
         resetClasses();
-        currentSectionIndex = -1;
-        updatePointCurrentPosition();
-        updateNavActiveClass(currentSectionIndex);
-        updateLineColors();
         naviSection.classList.remove('animationtop');
         menu.classList.add('menu-show');
       setTimeout(function() {
@@ -497,12 +493,17 @@ function resetClasses() {
   const aaa = document.querySelector('.aaa');
   const title = document.querySelector('.title');
 
-    top.classList.add('top--change');
-    aaa.classList.add('aaa--change');
-    title.classList.add('title-show');
+  top.classList.add('top--change');
+  aaa.classList.add('aaa--change');
+  title.classList.add('title-show');
 
   top.style.animation = '';
   aaa.style.animation = '';
   title.style.animation = '';
+
+  currentIndex = 0;
+  updatePointCurrentPosition();
+  updateNavActiveClass(currentIndex);
+  updateLineColors();
 }
 
